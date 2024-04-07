@@ -9,14 +9,12 @@ Ad esempio: **feature/fd/project-init**
 Tutte le pull request sui branch **develop** e **main** devono essere controllate e validate previa riunione del team di sviliuppo.
 
 Un esempio:
+
 `
 
-main
-
-    \_develop
-
-            |_ feature/fd/project-init
-            
-            |_ feature/aa/xxxx`
+    main
+        \_develop
+                |_ feature/fd/project-init
+                |_ feature/aa/xxxx`
 
 Ogni feature viene discussa ed assegnata nelle riunioni di aggiornamento.
