@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 void main() {
-  return runApp(CalendarApp());
+  return runApp(const CalendarApp());
 }
 
 /// The app which hosts the home page which contains the calendar on it.
 class CalendarApp extends StatelessWidget {
+  const CalendarApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(title: 'Calendar Demo', home: MyHomePage());
@@ -16,7 +18,7 @@ class CalendarApp extends StatelessWidget {
 /// The hove page which hosts the calendar
 class MyHomePage extends StatefulWidget {
   /// Creates the home page to display teh calendar widget.
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -75,13 +77,13 @@ class _MyHomePageState extends State<MyHomePage> {
         'Conference',
         startTime.add(const Duration(days: 1)),
         endTime.add(const Duration(days: 1)),
-        Color.fromARGB(255, 246, 10, 222),
+        const Color.fromARGB(255, 246, 10, 222),
         false));
     meetings.add(Meeting(
         'Conference',
         startTime.add(const Duration(days: 10)),
         endTime.add(const Duration(days: 10)),
-        Color.fromARGB(255, 250, 246, 25),
+        const Color.fromARGB(255, 250, 246, 25),
         false));
     return meetings;
   }
@@ -164,8 +166,8 @@ void calendarTapped(CalendarTapDetails details, BuildContext context) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Container(child: new Text('sdjhfgdjsuyhfghjgdsf')),
-          content: Container(
+          title: Container(child: const Text('sdjhfgdjsuyhfghjgdsf')),
+          content: const SizedBox(
             height: 80,
             child: Column(
               children: <Widget>[
@@ -180,11 +182,11 @@ void calendarTapped(CalendarTapDetails details, BuildContext context) {
                     ),
                   ],
                 ),
-                Container(
+                SizedBox(
                   height: 40,
                   child: Row(
                     children: <Widget>[
-                      Text('sdjhfgdjsuyhfghjgdsf'!,
+                      Text('sdjhfgdjsuyhfghjgdsf',
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 15)),
                     ],
@@ -198,7 +200,7 @@ void calendarTapped(CalendarTapDetails details, BuildContext context) {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: new Text('Close'))
+                child: const Text('Close'))
           ],
         );
       });
