@@ -65,20 +65,33 @@ class _MyHomePageState extends State<MyHomePage> {
     final DateTime today = DateTime.now();
     final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(Meeting(
-        'Conference 1', startTime, endTime, const Color(0xFF0F8644), false));
-    meetings.add(Meeting(
+    meetings.add(
+      Meeting(
+        'Conference 1',
+        startTime,
+        endTime,
+        const Color(0xFF0F8644),
+        false,
+      ),
+    );
+    meetings.add(
+      Meeting(
         'Conference 2',
         startTime.add(const Duration(days: 1)),
         endTime.add(const Duration(days: 1)),
-        Color.fromARGB(255, 246, 10, 222),
-        false));
-    meetings.add(Meeting(
+        const Color.fromARGB(255, 246, 10, 222),
+        false,
+      ),
+    );
+    meetings.add(
+      Meeting(
         'Conference 3',
         startTime.add(const Duration(days: 10)),
         endTime.add(const Duration(days: 10)),
-        Color.fromARGB(255, 250, 246, 25),
-        false));
+        const Color.fromARGB(255, 250, 246, 25),
+        false,
+      ),
+    );
     return meetings;
   }
 }
