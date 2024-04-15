@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar/feature/calendar/domain/models/meeting.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MeetingContainer extends StatelessWidget {
-  const MeetingContainer({super.key, required this.eventName});
+class MeetingContainer extends ConsumerWidget {
+  const MeetingContainer({Key? key, required this.meeting}) : super(key: key);
 
-  final String eventName;
+  final Meeting meeting;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(child: Text(eventName));
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(child: Text(meeting.eventName));
   }
 
   static List<MeetingContainer> asList(List<Meeting> meetings) {
-    List<MeetingContainer> returns = [];
-    List.generate(
-      meetings.length,
-      (index) =>
-          returns.add(MeetingContainer(eventName: meetings[index].eventName)),
-    );
-    return returns;
+    return meetings
+        .map((meeting) => MeetingContainer(meeting: meeting))
+        .toList();
   }
 }
