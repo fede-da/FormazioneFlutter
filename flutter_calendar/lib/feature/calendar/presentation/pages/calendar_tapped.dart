@@ -11,12 +11,12 @@ void calendarTapped(CalendarTapDetails details, BuildContext context) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Container(child: new Text('sdjhfgdjsuyhfghjgdsf')),
+          title: Container(child: const Text('sdjhfgdjsuyhfghjgdsf')),
           content: Container(
             height: 80,
             child: Column(
               children: <Widget>[
-                Row(
+                const Row(
                   children: <Widget>[
                     Text(
                       'sdjhfgdjsuyhfghjgdsf',
@@ -29,9 +29,9 @@ void calendarTapped(CalendarTapDetails details, BuildContext context) {
                 ),
                 Container(
                   height: 40,
-                  child: Row(
+                  child: const Row(
                     children: <Widget>[
-                      Text('sdjhfgdjsuyhfghjgdsf'!,
+                      Text('sdjhfgdjsuyhfghjgdsf',
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 15)),
                     ],
@@ -45,7 +45,7 @@ void calendarTapped(CalendarTapDetails details, BuildContext context) {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: new Text('Close'))
+                child: const Text('Close'))
           ],
         );
       });

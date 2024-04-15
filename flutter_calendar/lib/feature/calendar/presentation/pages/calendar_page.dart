@@ -66,15 +66,15 @@ class _MyHomePageState extends State<MyHomePage> {
     final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
     meetings.add(Meeting(
-        'Conference', startTime, endTime, const Color(0xFF0F8644), false));
+        'Conference 1', startTime, endTime, const Color(0xFF0F8644), false));
     meetings.add(Meeting(
-        'Conference',
+        'Conference 2',
         startTime.add(const Duration(days: 1)),
         endTime.add(const Duration(days: 1)),
         Color.fromARGB(255, 246, 10, 222),
         false));
     meetings.add(Meeting(
-        'Conference',
+        'Conference 3',
         startTime.add(const Duration(days: 10)),
         endTime.add(const Duration(days: 10)),
         Color.fromARGB(255, 250, 246, 25),
