@@ -18,6 +18,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Meeting> selectedMeetings = [];
+  late Meeting selectedMeeting;
 
   @override
   void initState() {
@@ -49,20 +50,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 monthViewSettings: const MonthViewSettings(
                     appointmentDisplayMode:
                         MonthAppointmentDisplayMode.appointment),
+                //TODO: da usare riverpod
+                // onTap: () => {},
+                // vado a pescare gli appointments del giorno selezioanto (appointment = Meeting)
                 onTap: (calendarTapDetails) {
                   setState(() {
-                    // Aggiorna i meeting selezionati quando un giorno viene cliccato
-                    selectedMeetings =
-                        _getMeetingsOnDate(calendarTapDetails.date!);
+                    if ((calendarTapDetails.appointments == null) ||
+                        calendarTapDetails.appointments!.isEmpty) {
+                      return;
+                    } else {
+                      selectedMeeting = calendarTapDetails.appointments![0];
+                    }
                   });
                 },
               ),
             ),
+            //TODO: da mettere il riverpod
             Expanded(
               flex: 1,
-              child: GridView.count(
-                crossAxisCount: 1,
-                children: MeetingContainer.asList(selectedMeetings),
+              child: SingleChildScrollView(
+                child: MeetingContainer(
+                  meeting: selectedMeeting,
+                ),
               ),
             ),
           ],
@@ -76,10 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
     final DateTime today = DateTime.now();
     final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
-
-    MeetingDataSource(List<Meeting> source) {
-      selectedMeetings = source;
-    }
 
     meetings.add(
       Meeting(
