@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar/feature/calendar/data/datasources/meeting_data_source.dart';
 import 'package:flutter_calendar/feature/calendar/domain/models/meeting.dart';
-import 'package:flutter_calendar/feature/calendar/presentation/pages/calendar_tapped.dart';
+// import 'package:flutter_calendar/feature/calendar/presentation/pages/calendar_tapped.dart';
 import 'package:flutter_calendar/feature/calendar/presentation/widgets/meeting_container.dart';
 import 'package:flutter_calendar/feature/state/tutorial_state.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';

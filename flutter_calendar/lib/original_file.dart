@@ -183,9 +183,9 @@ void calendarTapped(CalendarTapDetails details, BuildContext context) {
                 ),
                 Container(
                   height: 40,
-                  child: Row(
+                  child: const Row(
                     children: <Widget>[
-                      Text('sdjhfgdjsuyhfghjgdsf'!,
+                      Text('sdjhfgdjsuyhfghjgdsf',
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 15)),
                     ],
@@ -199,7 +199,7 @@ void calendarTapped(CalendarTapDetails details, BuildContext context) {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: new Text('Close'))
+                child: const Text('Close'))
           ],
         );
       });
