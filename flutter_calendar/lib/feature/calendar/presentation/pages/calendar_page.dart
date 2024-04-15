@@ -18,7 +18,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Meeting> selectedMeetings = [];
-  late Meeting selectedMeeting;
+  Meeting? selectedMeeting;
 
   @override
   void initState() {
@@ -69,9 +69,14 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
               flex: 1,
               child: SingleChildScrollView(
-                child: MeetingContainer(
-                  meeting: selectedMeeting,
-                ),
+                child: selectedMeeting == null
+                    ? MeetingContainer(
+                        meeting: new Meeting("eventName", DateTime.now(),
+                            DateTime.now(), Colors.black, false),
+                      )
+                    : MeetingContainer(
+                        meeting: selectedMeeting!,
+                      ),
               ),
             ),
           ],
