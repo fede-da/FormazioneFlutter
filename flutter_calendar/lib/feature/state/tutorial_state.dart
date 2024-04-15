@@ -20,34 +20,41 @@ class HelloWorld extends ConsumerWidget {
 }
 
 // test counter riverpod:
-final counterProvider = StateProvider<int>((ref) {
-  return 0;
+final counterProvider = StateNotifierProvider<Counter, int>((ref) {
+  return Counter();
 });
+
+class Counter extends StateNotifier<int> {
+  Counter() : super(0);
+
+  void increment() => state++;
+  void decrement() => state--;
+}
 
 class CounterContainer extends ConsumerWidget {
   const CounterContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final counter = ref.watch(counterProvider.notifier).state;
+    final counter = ref.watch(counterProvider);
 
     return Container(
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('Counter: ${counter}',
+          Text('Counter: $counter',
               style: Theme.of(context).textTheme.headlineMedium),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               FloatingActionButton(
-                onPressed: () => ref.read(counterProvider.notifier).state++,
+                onPressed: () => ref.read(counterProvider.notifier).increment(),
                 tooltip: 'Increment',
                 child: Icon(Icons.add),
               ),
               FloatingActionButton(
-                onPressed: () => ref.read(counterProvider.notifier).state--,
+                onPressed: () => ref.read(counterProvider.notifier).decrement(),
                 tooltip: 'Decrement',
                 child: Icon(Icons.remove),
               ),
