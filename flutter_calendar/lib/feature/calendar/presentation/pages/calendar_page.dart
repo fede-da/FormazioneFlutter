@@ -6,6 +6,7 @@ import 'package:flutter_calendar/feature/calendar/presentation/widgets/sfcalenda
 import 'package:flutter_calendar/feature/state/meeting_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+//TODO: da convertire in ConsumerWidget e nno usare direttamente Consumer
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
