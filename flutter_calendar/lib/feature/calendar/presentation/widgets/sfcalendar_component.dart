@@ -11,8 +11,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 class SfCalendarComponent extends ConsumerWidget {
   final Function(List<Meeting>) onAppointmentsSelected;
 
-  const SfCalendarComponent({Key? key, required this.onAppointmentsSelected})
-      : super(key: key);
+  const SfCalendarComponent({super.key, required this.onAppointmentsSelected});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
