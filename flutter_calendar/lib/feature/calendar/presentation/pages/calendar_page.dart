@@ -4,15 +4,14 @@ import 'package:flutter_calendar/feature/calendar/presentation/widgets/meeting_c
 import 'package:flutter_calendar/feature/calendar/presentation/widgets/sfcalendar_component.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Meeting? selectedMeeting;
+  List<Meeting>? meetingsOnSelectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +26,22 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
               flex: 1,
               child: SfCalendarComponent(
-                // Passa una funzione di callback per ricevere l'appuntamento selezionato dalla SfCalendarComponent
-                onAppointmentSelected: (meeting) {
+                // Passa una funzione di callback per ricevere la lista degli appuntamenti del giorno selezionato
+                onAppointmentsSelected: (meetings) {
                   setState(() {
-                    selectedMeeting = meeting;
+                    meetingsOnSelectedDate = meetings;
                   });
                 },
               ),
             ),
             Expanded(
               flex: 1,
-              child: selectedMeeting != null
-                  ? MeetingContainer(meeting: selectedMeeting!)
+              child: meetingsOnSelectedDate != null &&
+                      meetingsOnSelectedDate!.isNotEmpty
+                  ? ListView(
+                      children:
+                          MeetingContainer.asList(meetingsOnSelectedDate!),
+                    )
                   : const Padding(
                       padding: EdgeInsets.all(10),
                       child: Text("Nessun evento attualmente"),

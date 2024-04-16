@@ -8,46 +8,36 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 // Provider per il MeetingNotifier.
 // Ci permette di accedere allo stato dei meeting in qualsiasi punto dell'app.
 // vado a gestire il mio model nel mio state presente qui.
-final meetingProvider =
-    StateNotifierProvider<MeetingNotifier, CalendarMeetings>((ref) {
-  return MeetingNotifier();
-});
-
 class SfCalendarComponent extends ConsumerWidget {
-  // Callback chiamata quando viene selezionato un appuntamento.
-  final Function(Meeting?) onAppointmentSelected;
+  final Function(List<Meeting>) onAppointmentsSelected;
 
-  const SfCalendarComponent({super.key, required this.onAppointmentSelected});
+  const SfCalendarComponent({Key? key, required this.onAppointmentsSelected})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final List<Meeting> selectedMeetings = [];
+    final CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
 
     return SfCalendar(
       view: CalendarView.month,
-      // Imposta la sorgente dei dati per il calendario.
       dataSource: MeetingDataSource(_getDataSource()),
       monthViewSettings: const MonthViewSettings(
-        // Imposta la modalità di visualizzazione degli appuntamenti nel mese.
         appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
       ),
       onTap: (CalendarTapDetails details) {
         if (details.appointments != null) {
           selectedMeetings.clear();
-          // Aggiunge tutti gli appuntamenti selezionati alla lista.
           selectedMeetings
               .addAll(details.appointments!.map((e) => e as Meeting));
-          // Aggiorna lo stato dei meeting con gli appuntamenti selezionati.
           ref.read(meetingProvider.notifier).updateMeetings(selectedMeetings);
-          // Passa l'appuntamento selezionato alla home
-          onAppointmentSelected(
-              selectedMeetings.isNotEmpty ? selectedMeetings.first : null);
+          // Passa gli incontri selezionati alla home
+          onAppointmentsSelected(selectedMeetings);
         }
       },
     );
   }
 
-  // Genera una lista di appuntamenti di esempio.
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
     final DateTime today = DateTime.now();
@@ -91,5 +81,13 @@ class SfCalendarComponent extends ConsumerWidget {
       ),
     );
     return meetings;
+  }
+
+  List<Meeting> _getMeetingsOnDate(DateTime date) {
+    return _getDataSource().where((meeting) {
+      return meeting.from.day == date.day &&
+          meeting.from.month == date.month &&
+          meeting.from.year == date.year;
+    }).toList();
   }
 }
