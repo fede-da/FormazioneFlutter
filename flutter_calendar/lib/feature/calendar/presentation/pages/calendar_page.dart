@@ -6,15 +6,9 @@ import 'package:flutter_calendar/feature/calendar/presentation/widgets/sfcalenda
 import 'package:flutter_calendar/feature/state/meeting_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
