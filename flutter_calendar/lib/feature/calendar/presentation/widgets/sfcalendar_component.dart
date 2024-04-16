@@ -73,7 +73,61 @@ class SfCalendarComponent extends ConsumerWidget {
         'Conference 1.1',
         startTime,
         endTime,
+        Colors.red,
+        false,
+      ),
+    );
+    meetings.add(
+      Meeting(
+        'Conference 1.2',
+        startTime,
+        endTime,
+        Colors.black,
+        false,
+      ),
+    );
+    meetings.add(
+      Meeting(
+        'Conference 1.3',
+        startTime,
+        endTime,
+        Colors.blue,
+        false,
+      ),
+    );
+    meetings.add(
+      Meeting(
+        'Conference 1.4',
+        startTime,
+        endTime,
         Colors.purpleAccent,
+        false,
+      ),
+    );
+    meetings.add(
+      Meeting(
+        'Conference 1.5',
+        startTime,
+        endTime,
+        Colors.yellowAccent,
+        false,
+      ),
+    );
+    meetings.add(
+      Meeting(
+        'Conference 1.6',
+        startTime,
+        endTime,
+        Colors.purpleAccent,
+        false,
+      ),
+    );
+    meetings.add(
+      Meeting(
+        'Conference 1.7',
+        startTime,
+        endTime,
+        Colors.orange,
         false,
       ),
     );
