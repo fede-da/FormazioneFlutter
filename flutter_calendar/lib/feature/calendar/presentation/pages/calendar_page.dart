@@ -26,6 +26,12 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Expanded(
               flex: 1,
+              // Consumer: è utilizzato per accedere ai valori forniti da un provider
+              // senza dover ripetere manualmente la sua costruzione in ogni widget figlio.
+              // Accetta una funzione di creazione del widget come parametro builder,
+              // che viene chiamata ogni volta che il valore del provider cambia.
+              // Questo widget è particolarmente utile quando si lavora con provider come Riverpod p
+              // er gestire lo stato globale dell'applicazione.
               child: Consumer(builder: (context, ref, _) {
                 return SfCalendarComponent(
                   // Passa ref come parametro al widget SfCalendarComponent
