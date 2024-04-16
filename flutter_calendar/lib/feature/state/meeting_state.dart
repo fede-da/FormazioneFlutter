@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_calendar/feature/calendar/domain/models/meeting.dart';
 
+// Step 1: Definizione dello stato del calendario
 @immutable
 class CalendarMeetings {
   const CalendarMeetings(
@@ -25,23 +26,24 @@ class CalendarMeetings {
   }
 }
 
-// MeetingNotifier è una classe che estende StateNotifier.
-// Gestisce lo stato dei meeting e fornisce un metodo per aggiornare lo stato.
+// Step 2: Provider per il MeetingNotifier
+final meetingProvider =
+    StateNotifierProvider<MeetingNotifier, CalendarMeetings>((ref) {
+  return MeetingNotifier();
+});
+
+// Step 3: Implementazione della classe MeetingNotifier
 class MeetingNotifier extends StateNotifier<CalendarMeetings> {
-  // Inizializziamo lo stato come una lista vuota di meeting.
   MeetingNotifier()
       : super(const CalendarMeetings(meetings: [], currentMeeting: null));
 
-  // Questo metodo permette di aggiornare lo stato con una nuova lista di meeting.
+  // Metodo per aggiornare lo stato con una nuova lista di meeting
   void updateMeetings(List<Meeting> meetings) {
-    state.copyWithMultipleMeeting(meetings);
+    state = state.copyWithMultipleMeeting(meetings);
   }
 
-  void onNewMeetingSelected(CalendarMeetings newCalendarMeeting) {
-    state = newCalendarMeeting;
-  }
-
+  // Metodo per cambiare il meeting corrente
   void changeCurrentMeeting(Meeting newMeeting) {
-    state.copyWithSingleMeeting(newMeeting);
+    state = state.copyWithSingleMeeting(newMeeting);
   }
 }

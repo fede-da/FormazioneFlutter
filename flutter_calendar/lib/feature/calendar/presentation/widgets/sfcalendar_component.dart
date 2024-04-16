@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_calendar/feature/calendar/data/datasources/meeting_data_source.dart';
 import 'package:flutter_calendar/feature/calendar/domain/models/meeting.dart';
 import 'package:flutter_calendar/feature/state/meeting_state.dart';
@@ -14,35 +14,40 @@ final meetingProvider =
 });
 
 class SfCalendarComponent extends ConsumerWidget {
-  const SfCalendarComponent({super.key});
+  // Callback chiamata quando viene selezionato un appuntamento.
+  final Function(Meeting?) onAppointmentSelected;
+
+  const SfCalendarComponent({super.key, required this.onAppointmentSelected});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Meeting> selectedMeetings = [];
-    CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
+    final List<Meeting> selectedMeetings = [];
 
     return SfCalendar(
-      // Do not change Month otherwise ☠️
-      view: CalendarView.month, //CalendarView.month,
+      view: CalendarView.month,
+      // Imposta la sorgente dei dati per il calendario.
       dataSource: MeetingDataSource(_getDataSource()),
-      // by default the month appointment display mode set as Indicator, we can
-      // change the display mode as appointment using the appointment display
-      // mode property
       monthViewSettings: const MonthViewSettings(
-          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-      //TODO: da usare riverpod.
-      onTap: (test) {
-        Meeting prova = test.appointments![0];
+        // Imposta la modalità di visualizzazione degli appuntamenti nel mese.
+        appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+      ),
+      onTap: (CalendarTapDetails details) {
+        if (details.appointments != null) {
+          selectedMeetings.clear();
+          // Aggiunge tutti gli appuntamenti selezionati alla lista.
+          selectedMeetings
+              .addAll(details.appointments!.map((e) => e as Meeting));
+          // Aggiorna lo stato dei meeting con gli appuntamenti selezionati.
+          ref.read(meetingProvider.notifier).updateMeetings(selectedMeetings);
+          // Passa l'appuntamento selezionato alla home
+          onAppointmentSelected(
+              selectedMeetings.isNotEmpty ? selectedMeetings.first : null);
+        }
       },
-      // onTap: (value) =>
-      //     ref.read(meetingProvider.notifier).changeCurrentMeeting(value)
-      // setState(() {
-      //   // Aggiorna i meeting selezionati quando un giorno viene cliccato
-      //   selectedMeetings = _getMeetingsOnDate(calendarTapDetails.date!);
-      // });
     );
   }
 
+  // Genera una lista di appuntamenti di esempio.
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
     final DateTime today = DateTime.now();
@@ -55,6 +60,15 @@ class SfCalendarComponent extends ConsumerWidget {
         startTime,
         endTime,
         const Color(0xFF0F8644),
+        false,
+      ),
+    );
+    meetings.add(
+      Meeting(
+        'Conference 1.1',
+        startTime,
+        endTime,
+        Colors.purpleAccent,
         false,
       ),
     );
