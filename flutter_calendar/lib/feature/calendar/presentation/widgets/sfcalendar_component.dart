@@ -5,38 +5,54 @@ import 'package:flutter_calendar/feature/state/meeting_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-// Provider per il MeetingNotifier.
-// Ci permette di accedere allo stato dei meeting in qualsiasi punto dell'app.
-// vado a gestire il mio model nel mio state presente qui.
+// Il componente SfCalendarComponent è un widget Consumer che gestisce il calendario.
+// Utilizza Riverpod per accedere allo stato dei meeting.
 class SfCalendarComponent extends ConsumerWidget {
   final Function(List<Meeting>) onAppointmentsSelected;
+  final WidgetRef ref;
 
-  const SfCalendarComponent({super.key, required this.onAppointmentsSelected});
+  // Costruttore per SfCalendarComponent.
+  const SfCalendarComponent({
+    super.key,
+    required this.onAppointmentsSelected,
+    required this.ref,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Lista degli incontri selezionati.
     final List<Meeting> selectedMeetings = [];
-    final CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
+    // Ottiene lo stato dei meeting dal provider.
+    // final CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
 
     return SfCalendar(
+      // Imposta la vista del calendario su "mese".
       view: CalendarView.month,
+      // Imposta la fonte dati per il calendario utilizzando il DataSource degli incontri.
       dataSource: MeetingDataSource(_getDataSource()),
+      // Impostazioni per la visualizzazione del mese nel calendario.
       monthViewSettings: const MonthViewSettings(
         appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
       ),
+      // Gestisce l'evento onTap nel calendario.
       onTap: (CalendarTapDetails details) {
+        // Se ci sono incontri selezionati.
         if (details.appointments != null) {
+          // Pulisce la lista degli incontri selezionati.
           selectedMeetings.clear();
+          // Aggiunge gli incontri selezionati alla lista.
           selectedMeetings
               .addAll(details.appointments!.map((e) => e as Meeting));
+          // Aggiorna lo stato dei meeting utilizzando Riverpod.
           ref.read(meetingProvider.notifier).updateMeetings(selectedMeetings);
-          // Passa gli incontri selezionati alla home
+          // Passa gli incontri selezionati alla home.
           onAppointmentsSelected(selectedMeetings);
         }
       },
     );
   }
 
+  // Ottiene la lista dei dati degli incontri.
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
     final DateTime today = DateTime.now();
@@ -80,13 +96,5 @@ class SfCalendarComponent extends ConsumerWidget {
       ),
     );
     return meetings;
-  }
-
-  List<Meeting> _getMeetingsOnDate(DateTime date) {
-    return _getDataSource().where((meeting) {
-      return meeting.from.day == date.day &&
-          meeting.from.month == date.month &&
-          meeting.from.year == date.year;
-    }).toList();
   }
 }

@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_calendar/feature/calendar/domain/models/meeting.dart';
 
-// Step 1: Definizione dello stato del calendario
+// Definizione dello stato del calendario
 @immutable
 class CalendarMeetings {
   const CalendarMeetings(
       {required this.meetings, required this.currentMeeting});
 
-  final List<Meeting>? meetings;
-  final Meeting? currentMeeting;
+  final List<Meeting>? meetings; // Lista degli incontri.
+  final Meeting? currentMeeting; // Incontri correnti.
 
+  // Implementazione della classe MeetingNotifier.
   CalendarMeetings copyWithSingleMeeting(Meeting newCurrentMeeting) {
     return CalendarMeetings(
       meetings: meetings,
@@ -26,13 +27,13 @@ class CalendarMeetings {
   }
 }
 
-// Step 2: Provider per il MeetingNotifier
+// Provider per il MeetingNotifier
 final meetingProvider =
     StateNotifierProvider<MeetingNotifier, CalendarMeetings>((ref) {
   return MeetingNotifier();
 });
 
-// Step 3: Implementazione della classe MeetingNotifier
+// Implementazione della classe MeetingNotifier
 class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   MeetingNotifier()
       : super(const CalendarMeetings(meetings: [], currentMeeting: null));

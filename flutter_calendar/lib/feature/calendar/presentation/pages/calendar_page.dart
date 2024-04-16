@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar/feature/calendar/domain/models/meeting.dart';
 import 'package:flutter_calendar/feature/calendar/presentation/widgets/meeting_container.dart';
 import 'package:flutter_calendar/feature/calendar/presentation/widgets/sfcalendar_component.dart';
+import 'package:flutter_calendar/feature/state/meeting_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -12,8 +14,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Meeting>? meetingsOnSelectedDate;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,27 +26,34 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Expanded(
               flex: 1,
-              child: SfCalendarComponent(
-                // Passa una funzione di callback per ricevere la lista degli appuntamenti del giorno selezionato
-                onAppointmentsSelected: (meetings) {
-                  setState(() {
-                    meetingsOnSelectedDate = meetings;
-                  });
-                },
-              ),
+              child: Consumer(builder: (context, ref, _) {
+                return SfCalendarComponent(
+                  // Passa ref come parametro al widget SfCalendarComponent
+                  ref: ref,
+                  // Passa una funzione di callback per ricevere la lista degli appuntamenti del giorno selezionato
+                  onAppointmentsSelected: (meetings) {
+                    // Utilizza Riverpod per aggiornare lo stato
+                    ref.read(meetingProvider.notifier).updateMeetings(meetings);
+                  },
+                );
+              }),
             ),
             Expanded(
               flex: 1,
-              child: meetingsOnSelectedDate != null &&
-                      meetingsOnSelectedDate!.isNotEmpty
-                  ? ListView(
-                      children:
-                          MeetingContainer.asList(meetingsOnSelectedDate!),
-                    )
-                  : const Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text("Nessun evento attualmente"),
-                    ),
+              child: Consumer(builder: (context, ref, _) {
+                final List<Meeting>? meetingsOnSelectedDate =
+                    ref.watch(meetingProvider).meetings;
+                return meetingsOnSelectedDate != null &&
+                        meetingsOnSelectedDate.isNotEmpty
+                    ? ListView(
+                        children:
+                            MeetingContainer.asList(meetingsOnSelectedDate),
+                      )
+                    : const Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text("Nessun evento attualmente"),
+                      );
+              }),
             ),
           ],
         ),
