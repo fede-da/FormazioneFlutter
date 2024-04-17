@@ -35,6 +35,8 @@ final meetingProvider =
 
 // Implementazione della classe MeetingNotifier
 class MeetingNotifier extends StateNotifier<CalendarMeetings> {
+  DateTime selectedDate = DateTime.now();
+
   MeetingNotifier()
       : super(const CalendarMeetings(meetings: [], currentMeeting: null));
 
@@ -53,5 +55,12 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
     state = state.copyWithMultipleMeeting(
       (state.meetings ?? [])..add(newMeeting),
     );
+  }
+
+  //TODO: capire se serve o no:
+  // Metodo per selezionare il giorno cliccato
+  // per aggiungere poi il meeting
+  void updateSelectedDate(DateTime newDate) {
+    selectedDate = newDate;
   }
 }
