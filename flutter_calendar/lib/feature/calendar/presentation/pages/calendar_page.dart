@@ -63,10 +63,13 @@ class MyHomePage extends ConsumerWidget {
                     ref: ref,
                     // Passa una funzione di callback per ricevere la lista degli appuntamenti del giorno selezionato
                     onAppointmentsSelected: (meetings) {
-                      // Utilizza Riverpod per aggiornare lo stato
-                      ref
-                          .read(meetingProvider.notifier)
-                          .updateMeetings(meetings);
+                      // Controlla se i meeting sono cambiati
+                      if (meetings != meetingsOnSelectedDate) {
+                        // Utilizza Riverpod per aggiornare lo stato
+                        ref
+                            .read(meetingProvider.notifier)
+                            .updateMeetings(meetings);
+                      }
                     },
                   ),
                 ),
