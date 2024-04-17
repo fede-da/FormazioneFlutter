@@ -11,7 +11,6 @@ class SfCalendarComponent extends ConsumerWidget {
   final Function(List<Meeting>) onAppointmentsSelected;
   final WidgetRef ref;
 
-  // Costruttore per SfCalendarComponent.
   const SfCalendarComponent({
     super.key,
     required this.onAppointmentsSelected,
@@ -26,39 +25,36 @@ class SfCalendarComponent extends ConsumerWidget {
     // final CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
 
     return SfCalendar(
-        // Imposta la vista del calendario su "mese".
-        view: CalendarView.month,
-        // Imposta la fonte dati per il calendario utilizzando il DataSource degli incontri.
-        dataSource: MeetingDataSource(_getDataSource()),
-        // Impostazioni per la visualizzazione del mese nel calendario.
-        monthViewSettings: const MonthViewSettings(
-          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-        ),
-        // Gestisce l'evento onTap nel calendario.
-        onTap: (CalendarTapDetails details) {
-          // Se ci sono incontri selezionati.
-          if (details.appointments != null) {
-            // Pulisce la lista degli incontri selezionati.
-            selectedMeetings.clear();
-            // Aggiunge gli incontri selezionati alla lista.
-            selectedMeetings.addAll(details.appointments!.cast<Meeting>());
-            // Passa gli incontri selezionati alla home
-            onAppointmentsSelected(selectedMeetings);
+      // Imposta la vista del calendario su "mese".
+      view: CalendarView.month,
+      // Imposta la fonte dati per il calendario utilizzando il DataSource degli incontri.
+      dataSource: MeetingDataSource(_getDataSource()),
+      // Impostazioni per la visualizzazione del mese nel calendario.
+      monthViewSettings: const MonthViewSettings(
+        appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+      ),
+      // Gestisce l'evento onTap nel calendario.
+      onTap: (CalendarTapDetails details) {
+        // Se ci sono incontri selezionati.
+        if (details.appointments != null) {
+          // Pulisce la lista degli incontri selezionati.
+          selectedMeetings.clear();
+          // Aggiunge gli incontri selezionati alla lista.
+          selectedMeetings.addAll(details.appointments!.cast<Meeting>());
+          // Passa gli incontri selezionati alla home
+          onAppointmentsSelected(selectedMeetings);
 
-            // Aggiorna la data selezionata nel provider
-            ref
-                .read(meetingProvider.notifier)
-                .updateSelectedDate(details.date!);
-          }
+          // Aggiorna la data selezionata nel provider
+          ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
         }
+      },
 
-        //TODO: capire come aggiungere un nuovo meeting in base al giorno selezioanto
-        //onSelectionChanged: (CalendarSelectionDetails details) {
-        //if (details.date != null) {
-        // ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
-        //}
-        //  },
-        );
+      onSelectionChanged: (CalendarSelectionDetails details) {
+        if (details.date != null) {
+          ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
+        }
+      },
+    );
   }
 
   // Ottiene la lista dei dati degli incontri.
