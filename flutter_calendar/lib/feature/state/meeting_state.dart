@@ -95,4 +95,14 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   void updateSelectedDate(DateTime newDate) {
     selectedDate = newDate;
   }
+
+  //WIP
+  List<Meeting> _getMeetingsOnDate(DateTime date) {
+    return state.meetings?.where((meeting) {
+          return meeting.from.day == date.day &&
+              meeting.from.month == date.month &&
+              meeting.from.year == date.year;
+        }).toList() ??
+        [];
+  }
 }
