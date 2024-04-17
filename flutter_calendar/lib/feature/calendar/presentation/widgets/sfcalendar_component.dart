@@ -82,7 +82,7 @@ class SfCalendarComponent extends ConsumerWidget {
         'Conference 1.2',
         startTime,
         endTime,
-        Colors.black,
+        Colors.grey,
         false,
       ),
     );
