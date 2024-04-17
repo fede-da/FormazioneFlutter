@@ -38,7 +38,9 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   DateTime selectedDate = DateTime.now();
 
   MeetingNotifier()
-      : super(const CalendarMeetings(meetings: [], currentMeeting: null));
+      : super(const CalendarMeetings(meetings: [], currentMeeting: null)) {
+    _addMockMeetings();
+  }
 
   // Metodo per aggiornare lo stato con una nuova lista di meeting
   void updateMeetings(List<Meeting> meetings) {
@@ -52,14 +54,42 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
 
   // Metodo per aggiungere un meeting
   void addMeeting(Meeting newMeeting) {
-    state = state.copyWithMultipleMeeting(
-      //TODO: vedere quale 2 opzioni vada bene, se lasciare la lista o crearne un'altra
-      (state.meetings ?? [])..add(newMeeting),
-      //List.from(state.meetings ?? [])..add(newMeeting),
-    );
+    final List<Meeting> updatedMeetings =
+        List<Meeting>.from(state.meetings ?? []);
+
+    updatedMeetings.add(newMeeting);
+    state = state.copyWithMultipleMeeting(updatedMeetings);
   }
 
-  //TODO: capire se serve o no:
+  // Metodo per aggiungere i dati mock
+  void _addMockMeetings() {
+    final DateTime today = DateTime.now();
+    final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
+    final DateTime endTime = startTime.add(const Duration(hours: 2));
+
+    List<Meeting> mockMeetings = [
+      Meeting(
+          'Conference 1', startTime, endTime, const Color(0xFF0F8644), false),
+      Meeting('Conference 1.1', startTime, endTime, Colors.red, false),
+      Meeting('Conference 1.2', startTime, endTime, Colors.grey, false),
+      Meeting('Conference 1.3', startTime, endTime, Colors.blue, false),
+      Meeting('Conference 1.4', startTime, endTime, Colors.purpleAccent, false),
+      Meeting(
+          'Conference 2',
+          startTime.add(const Duration(days: 1)),
+          endTime.add(const Duration(days: 1)),
+          const Color.fromARGB(255, 246, 10, 222),
+          false),
+      Meeting(
+          'Conference 3',
+          startTime.add(const Duration(days: 10)),
+          endTime.add(const Duration(days: 10)),
+          const Color.fromARGB(255, 250, 246, 25),
+          false),
+    ];
+    state = state.copyWithMultipleMeeting(mockMeetings);
+  }
+
   // Metodo per selezionare il giorno cliccato
   // per aggiungere poi il meeting
   void updateSelectedDate(DateTime newDate) {
