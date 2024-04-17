@@ -26,38 +26,52 @@ class SfCalendarComponent extends ConsumerWidget {
     // final CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
 
     return SfCalendar(
-      // Imposta la vista del calendario su "mese".
-      view: CalendarView.month,
-      // Imposta la fonte dati per il calendario utilizzando il DataSource degli incontri.
-      dataSource: MeetingDataSource(_getDataSource()),
-      // Impostazioni per la visualizzazione del mese nel calendario.
-      monthViewSettings: const MonthViewSettings(
-        appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-      ),
-      // Gestisce l'evento onTap nel calendario.
-      onTap: (CalendarTapDetails details) {
-        // Se ci sono incontri selezionati.
-        if (details.appointments != null) {
-          // Pulisce la lista degli incontri selezionati.
-          selectedMeetings.clear();
-          // Aggiunge gli incontri selezionati alla lista.
-          selectedMeetings
-              .addAll(details.appointments!.map((e) => e as Meeting));
-          // Aggiorna lo stato dei meeting utilizzando Riverpod.
-          ref.read(meetingProvider.notifier).updateMeetings(selectedMeetings);
-          // Passa gli incontri selezionati alla home.
-          onAppointmentsSelected(selectedMeetings);
+        // Imposta la vista del calendario su "mese".
+        view: CalendarView.month,
+        // Imposta la fonte dati per il calendario utilizzando il DataSource degli incontri.
+        dataSource: MeetingDataSource(_getDataSource()),
+        // Impostazioni per la visualizzazione del mese nel calendario.
+        monthViewSettings: const MonthViewSettings(
+          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+        ),
+        // Gestisce l'evento onTap nel calendario.
+        onTap: (CalendarTapDetails details) {
+          // Se ci sono incontri selezionati.
+          if (details.appointments != null) {
+            // Pulisce la lista degli incontri selezionati.
+            selectedMeetings.clear();
+            // Aggiunge gli incontri selezionati alla lista.
+            selectedMeetings
+                .addAll(details.appointments!.map((e) => e as Meeting));
+            // Aggiorna lo stato dei meeting utilizzando Riverpod.
+            ref.read(meetingProvider.notifier).updateMeetings(selectedMeetings);
+            // Passa gli incontri selezionati alla home.
+            onAppointmentsSelected(selectedMeetings);
+          }
         }
-      },
-    );
+        //TODO: capire come aggiungere un nuovo meeting in base al giorno selezioanto
+        //onSelectionChanged: (CalendarSelectionDetails details) {
+        //if (details.date != null) {
+        // ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
+        //}
+        //  },
+        );
   }
 
   // Ottiene la lista dei dati degli incontri.
   List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = <Meeting>[];
+    //TODO: cambiare dal moc al ref
+    //  final List<Meeting> meetings = <Meeting>[];
+    // Ottieni la lista dei meeting dallo stato del provider
+    final List<Meeting>? meetings = ref.watch(meetingProvider).meetings;
     final DateTime today = DateTime.now();
     final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
+
+    // Se la lista dei meeting è null, restituisci una lista vuota
+    if (meetings == null) {
+      return <Meeting>[];
+    }
 
     meetings.add(
       Meeting(
@@ -149,6 +163,7 @@ class SfCalendarComponent extends ConsumerWidget {
         false,
       ),
     );
+
     return meetings;
   }
 }

@@ -53,7 +53,9 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   // Metodo per aggiungere un meeting
   void addMeeting(Meeting newMeeting) {
     state = state.copyWithMultipleMeeting(
+      //TODO: vedere quale 2 opzioni vada bene, se lasciare la lista o crearne un'altra
       (state.meetings ?? [])..add(newMeeting),
+      //List.from(state.meetings ?? [])..add(newMeeting),
     );
   }
 
