@@ -25,6 +25,23 @@ class MyHomePage extends ConsumerWidget {
     final List<Meeting>? meetingsOnSelectedDate =
         ref.watch(meetingProvider).meetings;
 
+    void addMeeting() {
+      final DateTime today = DateTime.now();
+      final DateTime startTime =
+          DateTime(today.year, today.month, today.day, 9);
+      final DateTime endTime = startTime.add(const Duration(hours: 2));
+      // Crea un nuovo meeting
+      Meeting newMeeting = Meeting(
+          'Nuovo Meeting',
+          startTime.add(const Duration(days: 1)),
+          endTime.add(const Duration(days: 1)),
+          Colors.purpleAccent,
+          false);
+
+      // Aggiorna lo stato del provider
+      ref.read(meetingProvider.notifier).addMeeting(newMeeting);
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -72,7 +89,7 @@ class MyHomePage extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: addMeeting,
                   backgroundColor: Colors.white,
                   shape: const CircleBorder(),
                   child: const Icon(

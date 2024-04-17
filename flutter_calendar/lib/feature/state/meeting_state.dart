@@ -47,4 +47,11 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   void changeCurrentMeeting(Meeting newMeeting) {
     state = state.copyWithSingleMeeting(newMeeting);
   }
+
+  // Metodo per aggiungere un meeting
+  void addMeeting(Meeting newMeeting) {
+    state = state.copyWithMultipleMeeting(
+      (state.meetings ?? [])..add(newMeeting),
+    );
+  }
 }
