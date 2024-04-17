@@ -29,17 +29,17 @@ class MyHomePage extends ConsumerWidget {
       // Ottieni la data selezionata dallo stato del provider
       final DateTime selectedDate =
           ref.read(meetingProvider.notifier).selectedDate;
-
       final DateTime startTime =
           DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9);
       final DateTime endTime = startTime.add(const Duration(hours: 2));
 
       Meeting newMeeting = Meeting(
-          'Nuovo Meeting ${meetingsOnSelectedDate?.length}',
-          startTime,
-          endTime,
-          Colors.purpleAccent,
-          false);
+        'Nuovo Meeting ${meetingsOnSelectedDate?.length ?? 0 + 1}', // Aggiungiamo un numero incrementale per rendere univoci i nomi dei meeting
+        startTime,
+        endTime,
+        Colors.purpleAccent,
+        false,
+      );
 
       ref.read(meetingProvider.notifier).addMeeting(newMeeting);
     }
