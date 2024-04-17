@@ -34,7 +34,7 @@ class MyHomePage extends ConsumerWidget {
       final DateTime endTime = startTime.add(const Duration(hours: 2));
 
       Meeting newMeeting = Meeting(
-        'Nuovo Meeting ${meetingsOnSelectedDate?.length ?? 0 + 1}', // Aggiungiamo un numero incrementale per rendere univoci i nomi dei meeting
+        'Nuovo Meeting ${meetingsOnSelectedDate?.length ?? 0 + 1}',
         startTime,
         endTime,
         Colors.purpleAccent,
