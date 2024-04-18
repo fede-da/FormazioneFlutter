@@ -48,6 +48,17 @@ class MyHomePage extends ConsumerWidget {
       ref.read(meetingProvider.notifier).addMeeting(newMeeting);
     }
 
+  @override
+  Widget build(BuildContext context) {
+    var source = _getDataSource();
+    int aboveSize = 3;
+    int belowSize = 1;
+    if (!(MediaQuery.of(context).size.height < 668.0)) {
+      aboveSize = 5;
+      belowSize = 4;
+    }
+    DateTime now = DateTime.now();
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -99,6 +110,49 @@ class MyHomePage extends ConsumerWidget {
               bottom: 16,
               child: AddMeetingButton(
                 onAppointmentsSelected: addMeeting,
+            Expanded(
+              flex: aboveSize,
+              child: SfCalendar(
+                // Do not change Month otherwise ☠️
+                view: CalendarView.month,
+                dataSource: MeetingDataSource(source),
+                monthViewSettings: const MonthViewSettings(
+                    appointmentDisplayMode:  MonthAppointmentDisplayMode.appointment
+                    ),
+                // minDate: DateTime(now.year, now.month, 1),
+                // maxDate: DateTime(now.year, now.month + 1, 0),
+
+                // by default the month appointment display mode set as Indicator, we can
+                // change the display mode as appointment using the appointment display
+                // mode property
+                //TODO: da usare riverpod
+                // onTap: () => {},
+                // vado a pescare gli appointments del giorno selezioanto (appointment = Meeting)
+
+                onTap: (calendarTapDetails) {
+                  setState(() {
+                    if ((calendarTapDetails.appointments == null) ||
+                        calendarTapDetails.appointments!.isEmpty) {
+                      return;
+                    } else {
+                      selectedMeeting = calendarTapDetails.appointments![0];
+                    }
+                  });
+                },
+              ),
+            ),
+            //TODO: da mettere il riverpod
+            Expanded(
+              flex: belowSize,
+              child: SingleChildScrollView(
+                child: selectedMeeting == null
+                    ? MeetingContainer(
+                        meeting: new Meeting("eventName", DateTime.now(),
+                            DateTime.now(), Colors.black, false),
+                      )
+                    : MeetingContainer(
+                        meeting: selectedMeeting!,
+                      ),
               ),
             ),
           ],
