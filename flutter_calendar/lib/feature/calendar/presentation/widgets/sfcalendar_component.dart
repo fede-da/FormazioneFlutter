@@ -35,6 +35,7 @@ class SfCalendarComponent extends ConsumerWidget {
         appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
       ),
       // Gestisce l'evento onTap nel calendario.
+      //TODO: controllare qui:
       onTap: (CalendarTapDetails details) {
         // Se ci sono incontri selezionati.
         if (details.appointments != null) {

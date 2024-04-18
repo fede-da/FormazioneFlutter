@@ -26,7 +26,7 @@ class MyHomePage extends ConsumerWidget {
     //     ref.watch(meetingProvider).meetings;
     final List<Meeting> meetingsOnSelectedDate =
         ref.watch(meetingsOnSelectedDateProvider);
-
+    //TODO: controllare qui:
     void addMeeting() {
       // Ottieni la data selezionata dallo stato del provider
       final DateTime selectedDate =
@@ -76,6 +76,7 @@ class MyHomePage extends ConsumerWidget {
                     },
                   ),
                 ),
+                //TODO: controllare qui:
                 Expanded(
                   flex: 1,
                   child: meetingsOnSelectedDate.isNotEmpty
