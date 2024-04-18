@@ -54,10 +54,13 @@ class SfCalendarComponent extends ConsumerWidget {
 
       onSelectionChanged: (CalendarSelectionDetails details) {
         if (details.date != null) {
+          // Aggiorna la data selezionata nel provider
           ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
+          // Ottieni gli incontri corrispondenti alla data selezionata
           List<Meeting> selectedMeetings = ref
               .read(meetingProvider.notifier)
               .getMeetingsOnDate(details.date!);
+          // Passa gli incontri selezionati alla home
           onAppointmentsSelected(selectedMeetings);
         }
       },
