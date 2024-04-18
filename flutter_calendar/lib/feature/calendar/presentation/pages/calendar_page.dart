@@ -22,8 +22,10 @@ class MyHomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<Meeting>? meetingsOnSelectedDate =
-        ref.watch(meetingProvider).meetings;
+    // final List<Meeting>? meetingsOnSelectedDate =
+    //     ref.watch(meetingProvider).meetings;
+    final List<Meeting> meetingsOnSelectedDate =
+        ref.watch(meetingsOnSelectedDateProvider);
 
     void addMeeting() {
       // Ottieni la data selezionata dallo stato del provider
@@ -34,13 +36,14 @@ class MyHomePage extends ConsumerWidget {
       final DateTime endTime = startTime.add(const Duration(hours: 2));
 
       Meeting newMeeting = Meeting(
-        'Nuovo Meeting ${meetingsOnSelectedDate?.length ?? 0 + 1}',
+        'Nuovo Meeting ${meetingsOnSelectedDate.length ?? 0 + 1}',
         startTime,
         endTime,
         Colors.purpleAccent,
         false,
       );
-
+      print("click =>");
+      print(newMeeting.toString());
       ref.read(meetingProvider.notifier).addMeeting(newMeeting);
     }
 
@@ -75,8 +78,7 @@ class MyHomePage extends ConsumerWidget {
                 ),
                 Expanded(
                   flex: 1,
-                  child: meetingsOnSelectedDate != null &&
-                          meetingsOnSelectedDate.isNotEmpty
+                  child: meetingsOnSelectedDate.isNotEmpty
                       ? ListView(
                           children:
                               MeetingContainer.asList(meetingsOnSelectedDate),

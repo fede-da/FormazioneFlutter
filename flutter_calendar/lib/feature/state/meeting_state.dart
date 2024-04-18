@@ -33,6 +33,20 @@ final meetingProvider =
   return MeetingNotifier();
 });
 
+// Nuovo provider per i meeting del giorno corrente
+final meetingsOnSelectedDateProvider = Provider<List<Meeting>>((ref) {
+  final selectedDate = ref.watch(meetingProvider.notifier).selectedDate;
+  final allMeetings = ref.watch(meetingProvider).meetings;
+  return allMeetings?.where((meeting) {
+        return meeting.from.day == selectedDate.day &&
+            meeting.from.month == selectedDate.month &&
+            meeting.from.year == selectedDate.year;
+      }).toList() ??
+      [];
+});
+
+// nuovo provider che controlla gli aggiornamenti della lista:
+
 // Implementazione della classe MeetingNotifier
 class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   DateTime selectedDate = DateTime.now();
@@ -99,7 +113,7 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   }
 
   //WIP
-  List<Meeting> _getMeetingsOnDate(DateTime date) {
+  List<Meeting> getMeetingsOnDate(DateTime date) {
     return state.meetings?.where((meeting) {
           return meeting.from.day == date.day &&
               meeting.from.month == date.month &&

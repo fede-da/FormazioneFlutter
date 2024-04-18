@@ -20,7 +20,8 @@ class SfCalendarComponent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Lista degli incontri selezionati.
-    final List<Meeting> selectedMeetings = [];
+    final List<Meeting> selectedMeetings =
+        ref.watch(meetingsOnSelectedDateProvider);
     // Ottiene lo stato dei meeting dal provider.
     // final CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
 
@@ -37,6 +38,8 @@ class SfCalendarComponent extends ConsumerWidget {
       onTap: (CalendarTapDetails details) {
         // Se ci sono incontri selezionati.
         if (details.appointments != null) {
+          print("ontap => ");
+          print(selectedMeetings.toString());
           // Pulisce la lista degli incontri selezionati.
           selectedMeetings.clear();
           // Aggiunge gli incontri selezionati alla lista.
@@ -52,6 +55,10 @@ class SfCalendarComponent extends ConsumerWidget {
       onSelectionChanged: (CalendarSelectionDetails details) {
         if (details.date != null) {
           ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
+          List<Meeting> selectedMeetings = ref
+              .read(meetingProvider.notifier)
+              .getMeetingsOnDate(details.date!);
+          onAppointmentsSelected(selectedMeetings);
         }
       },
     );
@@ -69,4 +76,41 @@ class SfCalendarComponent extends ConsumerWidget {
 
     return meetings;
   }
+
+//   List<Meeting> _getDataSource() {
+//     final List<Meeting> meetings = <Meeting>[];
+//     final DateTime today = DateTime.now();
+//     final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
+//     final DateTime endTime = startTime.add(const Duration(hours: 2));
+//
+//     meetings.add(
+//       Meeting(
+//         'Conference 1',
+//         startTime,
+//         endTime,
+//         const Color(0xFF0F8644),
+//         false,
+//       ),
+//     );
+//     meetings.add(
+//       Meeting(
+//         'Conference 2',
+//         startTime.add(const Duration(days: 1)),
+//         endTime.add(const Duration(days: 1)),
+//         const Color.fromARGB(255, 246, 10, 222),
+//         false,
+//       ),
+//     );
+//     meetings.add(
+//       Meeting(
+//         'Conference 3',
+//         startTime.add(const Duration(days: 10)),
+//         endTime.add(const Duration(days: 10)),
+//         const Color.fromARGB(255, 250, 246, 25),
+//         false,
+//       ),
+//     );
+//     return meetings;
+//   }
+// }
 }
