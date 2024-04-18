@@ -72,7 +72,7 @@ class MyHomePage extends ConsumerWidget {
                         ref
                             .read(meetingProvider.notifier)
                             .updateMeetings(meetings);
-                        //TODO: grazie a lui si aggirona
+                        //TODO: grazie a lui si aggirona, ma è sbagliato perché ricostruisce tutto il provider
                         ref.refresh(meetingsOnSelectedDateProvider);
                       }
                     },
