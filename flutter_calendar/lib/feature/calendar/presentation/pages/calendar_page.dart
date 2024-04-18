@@ -28,24 +28,25 @@ class MyHomePage extends ConsumerWidget {
     final List<Meeting> meetingsOnSelectedDate =
         ref.watch(meetingsOnSelectedDateProvider);
     //TODO: controllare qui:
-    void addMeeting() {
+    void addMeeting(
+        /* prende come input il DateTime creato dall'utente in add_meeting_button*/) {
       // Ottieni la data selezionata dallo stato del provider
-      final DateTime selectedDate =
-          ref.read(meetingProvider.notifier).selectedDate;
-      final DateTime startTime =
-          DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9);
-      final DateTime endTime = startTime.add(const Duration(hours: 2));
+      // final DateTime selectedDate =
+      //     ref.read(meetingProvider.notifier).selectedDate;
+      // final DateTime startTime =
+      //     DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9);
+      // final DateTime endTime = startTime.add(const Duration(hours: 2));
 
-      Meeting newMeeting = Meeting(
-        'Nuovo Meeting ${meetingsOnSelectedDate.length ?? 0 + 1}',
-        startTime,
-        endTime,
-        Colors.purpleAccent,
-        false,
-      );
-      print("click =>");
-      print(newMeeting.toString());
-      ref.read(meetingProvider.notifier).addMeeting(newMeeting);
+      // Meeting newMeeting = Meeting(
+      //   'Nuovo Meeting ${meetingsOnSelectedDate.length ?? 0 + 1}',
+      //   startTime,
+      //   endTime,
+      //   Colors.purpleAccent,
+      //   false,
+      // );
+      // print("click =>");
+      // print(newMeeting.toString());
+      // ref.read(meetingProvider.notifier).addMeeting(newMeeting);
     }
 
     int aboveSize = 3;
