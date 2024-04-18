@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar/feature/calendar/data/datasources/meeting_data_source.dart';
 import 'package:flutter_calendar/feature/calendar/domain/models/meeting.dart';
-// import 'package:flutter_calendar/feature/calendar/presentation/pages/calendar_tapped.dart';
 import 'package:flutter_calendar/feature/calendar/presentation/widgets/meeting_container.dart';
 import 'package:flutter_calendar/feature/state/tutorial_state.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -18,7 +17,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Meeting> selectedMeetings = [];
-  late Meeting selectedMeeting;
+  Meeting? selectedMeeting;
 
   @override
   void initState() {
@@ -30,6 +29,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var source = _getDataSource();
+    int aboveSize = 3;
+    int belowSize = 1;
+    if (!(MediaQuery.of(context).size.height < 668.0)) {
+      aboveSize = 5;
+      belowSize = 4;
+    }
+    DateTime now = DateTime.now();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -39,20 +45,24 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Column(
           children: [
             Expanded(
-              flex: 1,
+              flex: aboveSize,
               child: SfCalendar(
                 // Do not change Month otherwise ☠️
-                view: CalendarView.month, //CalendarView.month,
+                view: CalendarView.month,
                 dataSource: MeetingDataSource(source),
+                monthViewSettings: const MonthViewSettings(
+                    appointmentDisplayMode:  MonthAppointmentDisplayMode.appointment
+                    ),
+                // minDate: DateTime(now.year, now.month, 1),
+                // maxDate: DateTime(now.year, now.month + 1, 0),
+
                 // by default the month appointment display mode set as Indicator, we can
                 // change the display mode as appointment using the appointment display
                 // mode property
-                monthViewSettings: const MonthViewSettings(
-                    appointmentDisplayMode:
-                        MonthAppointmentDisplayMode.appointment),
                 //TODO: da usare riverpod
                 // onTap: () => {},
                 // vado a pescare gli appointments del giorno selezioanto (appointment = Meeting)
+
                 onTap: (calendarTapDetails) {
                   setState(() {
                     if ((calendarTapDetails.appointments == null) ||
@@ -67,11 +77,16 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             //TODO: da mettere il riverpod
             Expanded(
-              flex: 1,
+              flex: belowSize,
               child: SingleChildScrollView(
-                child: MeetingContainer(
-                  meeting: selectedMeeting,
-                ),
+                child: selectedMeeting == null
+                    ? MeetingContainer(
+                        meeting: new Meeting("eventName", DateTime.now(),
+                            DateTime.now(), Colors.black, false),
+                      )
+                    : MeetingContainer(
+                        meeting: selectedMeeting!,
+                      ),
               ),
             ),
           ],
