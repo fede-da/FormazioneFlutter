@@ -1,30 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar/feature/calendar/data/datasources/meeting_data_source.dart';
 import 'package:flutter_calendar/feature/calendar/domain/models/meeting.dart';
+import 'package:flutter_calendar/feature/calendar/presentation/widgets/add_meeting_button.dart';
 import 'package:flutter_calendar/feature/calendar/presentation/widgets/meeting_container.dart';
-import 'package:flutter_calendar/feature/state/tutorial_state.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:flutter_calendar/feature/calendar/presentation/widgets/sfcalendar_component.dart';
+import 'package:flutter_calendar/feature/state/meeting_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// The hove page which hosts the calendar
-class MyHomePage extends StatefulWidget {
-  /// Creates the home page to display teh calendar widget.
-  const MyHomePage({Key? key}) : super(key: key);
+// Consumer: è utilizzato per accedere ai valori forniti da un provider
+// senza dover ripetere manualmente la sua costruzione in ogni widget figlio.
+// Accetta una funzione di creazione del widget come parametro builder,
+// che viene chiamata ogni volta che il valore del provider cambia.
+// Questo widget è particolarmente utile quando si lavora con provider come Riverpod p
+// er gestire lo stato globale dell'applicazione.
+
+/// `ConsumerWidget` è un widget che permette di ascoltare i cambiamenti di un provider
+/// ricostruendo l'interfaccia utente in risposta a questi cambiamenti.
+/// Estende `StatelessWidget` e aggiunge un parametro extra al metodo `build`: l'oggetto "ref".
+/// Questo oggetto "ref" permette di interagire con i provider all'interno dell'albero dei widget.
+
+class MyHomePage extends ConsumerWidget {
+  const MyHomePage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _MyHomePageState createState() => _MyHomePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final List<Meeting>? meetingsOnSelectedDate =
+    //     ref.watch(meetingProvider).meetings;
+    final List<Meeting> meetingsOnSelectedDate =
+        ref.watch(meetingsOnSelectedDateProvider);
+    //TODO: controllare qui:
+    void addMeeting() {
+      // Ottieni la data selezionata dallo stato del provider
+      final DateTime selectedDate =
+          ref.read(meetingProvider.notifier).selectedDate;
+      final DateTime startTime =
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9);
+      final DateTime endTime = startTime.add(const Duration(hours: 2));
 
-class _MyHomePageState extends State<MyHomePage> {
-  List<Meeting> selectedMeetings = [];
-  Meeting? selectedMeeting;
-
-  @override
-  void initState() {
-    super.initState();
-    // Imposta i meeting selezionati per il giorno corrente all'avvio dell'app
-    selectedMeetings = _getMeetingsOnDate(DateTime.now());
-  }
+      Meeting newMeeting = Meeting(
+        'Nuovo Meeting ${meetingsOnSelectedDate.length ?? 0 + 1}',
+        startTime,
+        endTime,
+        Colors.purpleAccent,
+        false,
+      );
+      print("click =>");
+      print(newMeeting.toString());
+      ref.read(meetingProvider.notifier).addMeeting(newMeeting);
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +58,58 @@ class _MyHomePageState extends State<MyHomePage> {
       belowSize = 4;
     }
     DateTime now = DateTime.now();
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red,
-          title: const HelloWorld(),
+          title: const Text('Calendario'),
         ),
-        body: Column(
+        // stack = sovrappone i propri figli, posizionandoli l'uno sull'altro.
+        // I figli sono posizionati in base all'allineamento e alle loro proprietà top, right, bottom e left.
+        body: Stack(
           children: [
+            Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: SfCalendarComponent(
+                    // Passa ref come parametro al widget SfCalendarComponent
+                    ref: ref,
+                    // Passa una funzione di callback per ricevere la lista degli appuntamenti del giorno selezionato
+                    onAppointmentsSelected: (meetings) {
+                      // Controlla se i meeting sono cambiati
+                      if (meetings != meetingsOnSelectedDate) {
+                        // Utilizza Riverpod per aggiornare lo stato
+                        ref
+                            .read(meetingProvider.notifier)
+                            .updateMeetings(meetings);
+                        //TODO: grazie a lui si aggirona, ma è sbagliato perché ricostruisce tutto il provider
+                        ref.invalidate(meetingsOnSelectedDateProvider);
+                      }
+                    },
+                  ),
+                ),
+                //TODO: controllare qui:
+                Expanded(
+                  flex: 1,
+                  child: meetingsOnSelectedDate.isNotEmpty
+                      ? ListView(
+                          children:
+                              MeetingContainer.asList(meetingsOnSelectedDate),
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text("Nessun evento attualmente"),
+                        ),
+                ),
+              ],
+            ),
+            Positioned(
+              right: 16,
+              bottom: 16,
+              child: AddMeetingButton(
+                onAppointmentsSelected: addMeeting,
             Expanded(
               flex: aboveSize,
               child: SfCalendar(
@@ -93,49 +159,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
-  }
-
-  List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-
-    meetings.add(
-      Meeting(
-        'Conference 1',
-        startTime,
-        endTime,
-        const Color(0xFF0F8644),
-        false,
-      ),
-    );
-    meetings.add(
-      Meeting(
-        'Conference 2',
-        startTime.add(const Duration(days: 1)),
-        endTime.add(const Duration(days: 1)),
-        const Color.fromARGB(255, 246, 10, 222),
-        false,
-      ),
-    );
-    meetings.add(
-      Meeting(
-        'Conference 3',
-        startTime.add(const Duration(days: 10)),
-        endTime.add(const Duration(days: 10)),
-        const Color.fromARGB(255, 250, 246, 25),
-        false,
-      ),
-    );
-    return meetings;
-  }
-
-  List<Meeting> _getMeetingsOnDate(DateTime date) {
-    return _getDataSource().where((meeting) {
-      return meeting.from.day == date.day &&
-          meeting.from.month == date.month &&
-          meeting.from.year == date.year;
-    }).toList();
   }
 }

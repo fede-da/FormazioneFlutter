@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-
-/// riverpod:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 final helloWorldProvider = Provider<String>((ref) {
   return 'Riverpod';
 });
 
 class HelloWorld extends ConsumerWidget {
-  const HelloWorld({Key? key}) : super(key: key);
+  const HelloWorld({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +29,7 @@ class Counter extends StateNotifier<int> {
 }
 
 class CounterContainer extends ConsumerWidget {
-  const CounterContainer({Key? key}) : super(key: key);
+  const CounterContainer({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,12 +48,12 @@ class CounterContainer extends ConsumerWidget {
               FloatingActionButton(
                 onPressed: () => ref.read(counterProvider.notifier).increment(),
                 tooltip: 'Increment',
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
               ),
               FloatingActionButton(
                 onPressed: () => ref.read(counterProvider.notifier).decrement(),
                 tooltip: 'Decrement',
-                child: Icon(Icons.remove),
+                child: const Icon(Icons.remove),
               ),
             ],
           ),
