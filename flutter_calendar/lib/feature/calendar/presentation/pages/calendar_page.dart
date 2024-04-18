@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar/feature/calendar/domain/models/meeting.dart';
+import 'package:flutter_calendar/feature/calendar/presentation/widgets/add_meeting_button.dart';
 import 'package:flutter_calendar/feature/calendar/presentation/widgets/meeting_container.dart';
 import 'package:flutter_calendar/feature/calendar/presentation/widgets/sfcalendar_component.dart';
 import 'package:flutter_calendar/feature/state/meeting_state.dart';
@@ -73,7 +74,7 @@ class MyHomePage extends ConsumerWidget {
                             .read(meetingProvider.notifier)
                             .updateMeetings(meetings);
                         //TODO: grazie a lui si aggirona, ma è sbagliato perché ricostruisce tutto il provider
-                        ref.refresh(meetingsOnSelectedDateProvider);
+                        ref.invalidate(meetingsOnSelectedDateProvider);
                       }
                     },
                   ),
@@ -94,20 +95,10 @@ class MyHomePage extends ConsumerWidget {
               ],
             ),
             Positioned(
-              right: 0,
-              bottom: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: FloatingActionButton(
-                  onPressed: addMeeting,
-                  backgroundColor: Colors.white,
-                  shape: const CircleBorder(),
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.red,
-                    size: 30,
-                  ),
-                ),
+              right: 16,
+              bottom: 16,
+              child: AddMeetingButton(
+                onAppointmentsSelected: addMeeting,
               ),
             ),
           ],

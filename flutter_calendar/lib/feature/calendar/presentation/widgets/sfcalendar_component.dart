@@ -38,32 +38,31 @@ class SfCalendarComponent extends ConsumerWidget {
       //TODO: controllare qui:
       onTap: (CalendarTapDetails details) {
         // Se ci sono incontri selezionati.
-        if (details.appointments != null) {
-          print("ontap => ");
-          print(selectedMeetings.toString());
-          // Pulisce la lista degli incontri selezionati.
-          selectedMeetings.clear();
-          // Aggiunge gli incontri selezionati alla lista.
-          selectedMeetings.addAll(details.appointments!.cast<Meeting>());
-          // Passa gli incontri selezionati alla home
-          onAppointmentsSelected(selectedMeetings);
+        // if (details.appointments != null) {
+        // print("ontap => ");
+        // print(selectedMeetings.toString());
+        // Pulisce la lista degli incontri selezionati.
+        // selectedMeetings.clear();
+        // Aggiunge gli incontri selezionati alla lista.
+        // selectedMeetings.addAll(details.appointments!.cast<Meeting>());
+        // Passa gli incontri selezionati alla home
+        // onAppointmentsSelected(selectedMeetings);
 
-          // Aggiorna la data selezionata nel provider
-          ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
-        }
+        // Aggiorna la data selezionata nel provider
+        // ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
+        // }
       },
 
       onSelectionChanged: (CalendarSelectionDetails details) {
-        if (details.date != null) {
-          // Aggiorna la data selezionata nel provider
-          ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
-          // Ottieni gli incontri corrispondenti alla data selezionata
-          List<Meeting> selectedMeetings = ref
-              .read(meetingProvider.notifier)
-              .getMeetingsOnDate(details.date!);
-          // Passa gli incontri selezionati alla home
-          onAppointmentsSelected(selectedMeetings);
-        }
+        // if (details.date != null) {
+        // Aggiorna la data selezionata nel provider
+        ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
+        // Ottieni gli incontri corrispondenti alla data selezionata
+        List<Meeting> selectedMeetings =
+            ref.read(meetingProvider.notifier).getMeetingsOnDate(details.date!);
+        // Passa gli incontri selezionati alla home
+        onAppointmentsSelected(selectedMeetings);
+        // }
       },
     );
   }
