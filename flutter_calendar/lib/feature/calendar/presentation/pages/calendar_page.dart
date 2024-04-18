@@ -72,6 +72,8 @@ class MyHomePage extends ConsumerWidget {
                         ref
                             .read(meetingProvider.notifier)
                             .updateMeetings(meetings);
+                        //TODO: grazie a lui si aggirona
+                        ref.refresh(meetingsOnSelectedDateProvider);
                       }
                     },
                   ),
