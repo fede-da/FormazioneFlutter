@@ -6,13 +6,6 @@ import 'package:flutter_calendar/feature/calendar/presentation/widgets/sfcalenda
 import 'package:flutter_calendar/feature/state/meeting_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// Consumer: è utilizzato per accedere ai valori forniti da un provider
-// senza dover ripetere manualmente la sua costruzione in ogni widget figlio.
-// Accetta una funzione di creazione del widget come parametro builder,
-// che viene chiamata ogni volta che il valore del provider cambia.
-// Questo widget è particolarmente utile quando si lavora con provider come Riverpod p
-// er gestire lo stato globale dell'applicazione.
-
 /// `ConsumerWidget` è un widget che permette di ascoltare i cambiamenti di un provider
 /// ricostruendo l'interfaccia utente in risposta a questi cambiamenti.
 /// Estende `StatelessWidget` e aggiunge un parametro extra al metodo `build`: l'oggetto "ref".
