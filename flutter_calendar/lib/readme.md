@@ -32,3 +32,10 @@ Loris + Marco:
 - introdurre riverpod nel sfcalendar_component
 - usare sfcalendar_component in calendar_page
 - gli appuntamenti devono essere modificati con l'interazione del provider
+
+18/04/24:
+Loris + Marco:
+- Ripassare i principali Widget per la gestione della grafica
+- Mettere la form con timePicker e dataPicker al posto di onAppointmentsSelected su add_meeting_button
+- voidMeeting dovrà creare la form con tutto.
+- pulsante per cancellare
