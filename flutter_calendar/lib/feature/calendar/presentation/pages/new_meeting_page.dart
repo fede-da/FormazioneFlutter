@@ -1,70 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar/feature/state/meeting_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_calendar/feature/calendar/presentation/pages/calendar_page.dart';
-
-// Define a Provider to manage meeting data
-final meetingProvider = StateProvider<Meeting>(
-  (ref) => Meeting(
-    eventName: '',
-    selectedDate: DateTime.now(),
-    startTime: TimeOfDay(hour: 9, minute: 0),
-    endTime: TimeOfDay(hour: 18, minute: 0),
-  ),
-);
-
-class Meeting {
-  final String eventName;
-  final DateTime selectedDate;
-  final TimeOfDay startTime;
-  final TimeOfDay endTime;
-
-  Meeting({
-    required this.eventName,
-    required this.selectedDate,
-    required this.startTime,
-    required this.endTime,
-  });
-
-  Meeting copyWith({
-    String? eventName,
-    DateTime? selectedDate,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
-  }) {
-    return Meeting(
-      eventName: eventName ?? this.eventName,
-      selectedDate: selectedDate ?? this.selectedDate,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
-    );
-  }
-}
 
 class NewMeetingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final meeting = ref.watch(meetingProvider);
-    final meetingState = ref.read(meetingProvider.notifier);
-    TextEditingController _textcontroller = TextEditingController(text: meeting.eventName);
-    _textcontroller.selection = TextSelection.fromPosition(TextPosition(offset: meeting.eventName.length));
+    // Ottieni lo stato corrente del meeting e il notifier
+    final meetingState = ref.watch(meetingProvider);
+    final meetingNotifier = ref.read(meetingProvider.notifier);
 
+    // Crea un TextEditingController con il nome dell'evento corrente
+    TextEditingController textcontroller =
+        TextEditingController(text: meetingNotifier.eventName);
+    textcontroller.selection = TextSelection.fromPosition(
+        TextPosition(offset: meetingNotifier.eventName.length));
+
+    // Costruisci la UI della pagina
     return Scaffold(
         appBar: AppBar(
           title: const Text('Nuovo Meeting'),
           leading: IconButton(
+            // Naviga alla pagina principale quando l'icona viene premuta
             onPressed: () => Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => MyHomePage())),
             icon: const Icon(Icons.arrow_back),
           ),
           actions: [
-            //TODO: IMPLEMENTARE LOGICA PER AGGIUNGERE MEETING AL CALENDARIO
             IconButton(
               onPressed: () {
-                // Add meeting logic (consider using a service or repository)
-                print(meeting.eventName);
-                print(meeting.selectedDate);
-                print(meeting.startTime);
-                print(meeting.endTime);
+                // Stampa i dettagli del meeting e crea un nuovo meeting
+                print(meetingNotifier.eventName);
+                print(meetingNotifier.selectedDate);
+                print(meetingNotifier.startTime);
+                print(meetingNotifier.endTime);
+                meetingNotifier.createMeeting();
               },
               icon: const Icon(Icons.check),
             )
@@ -76,8 +46,9 @@ class NewMeetingPage extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: TextField(
-                  controller: _textcontroller,
-                  onChanged: (value) => meetingState.update((state) => state.copyWith(eventName: value)),
+                  controller: textcontroller,
+                  // Aggiorna il nome dell'evento quando il testo cambia
+                  onChanged: (value) => meetingNotifier.eventName = value,
                   decoration: const InputDecoration(
                     labelText: 'Nome evento',
                   ),
@@ -85,46 +56,51 @@ class NewMeetingPage extends ConsumerWidget {
               ),
               ListTile(
                 title: Text(
-                    'Data: ${meeting.selectedDate.toLocal().toString().split(' ')[0]}'),
+                    'Data: ${meetingNotifier.selectedDate.toLocal().toString().split(' ')[0]}'),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () async {
+                  // Mostra un DatePicker quando il ListTile viene premuto
                   final DateTime? picked = await showDatePicker(
                     context: context,
-                    initialDate: meeting.selectedDate,
+                    initialDate: meetingNotifier.selectedDate,
                     firstDate: DateTime(2000, 1),
                     lastDate: DateTime(3000),
                   );
                   if (picked != null) {
-                    meetingState.update(
-                        (state) => state.copyWith(selectedDate: picked));
+                    // Aggiorna la data selezionata con la data scelta
+                    meetingNotifier.updateSelectedDate(picked);
                   }
                 },
               ),
               ListTile(
-                title: Text('Dalle: ${meeting.startTime.format(context)}'),
+                title:
+                    Text('Dalle: ${meetingNotifier.startTime.format(context)}'),
                 trailing: const Icon(Icons.access_time),
                 onTap: () async {
+                  // Mostra un TimePicker quando il ListTile viene premuto
                   final TimeOfDay? picked = await showTimePicker(
                     context: context,
-                    initialTime: meeting.startTime,
+                    initialTime: meetingNotifier.startTime,
                   );
                   if (picked != null) {
-                    meetingState
-                        .update((state) => state.copyWith(startTime: picked));
+                    // Aggiorna l'ora di inizio con l'ora scelta
+                    meetingNotifier.startTime = picked;
                   }
                 },
               ),
               ListTile(
-                  title: Text('Alle: ${meeting.endTime.format(context)}'),
+                  title:
+                      Text('Alle: ${meetingNotifier.endTime.format(context)}'),
                   trailing: const Icon(Icons.access_time),
                   onTap: () async {
+                    // Mostra un TimePicker quando il ListTile viene premuto
                     final TimeOfDay? picked = await showTimePicker(
                       context: context,
-                      initialTime: meeting.endTime,
+                      initialTime: meetingNotifier.endTime,
                     );
                     if (picked != null) {
-                      meetingState
-                          .update((state) => state.copyWith(endTime: picked));
+                      // Aggiorna l'ora di fine con l'ora scelta
+                      meetingNotifier.endTime = picked;
                     }
                   })
             ])));
