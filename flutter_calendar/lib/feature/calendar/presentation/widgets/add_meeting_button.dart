@@ -33,7 +33,7 @@ class AddMeetingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => NewMeetingPage()));
         //TODO: si rompe qui quando apro:
         // showDialog(
