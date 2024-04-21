@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar/feature/calendar/presentation/pages/new_meeting_page.dart';
 
 class AddMeetingButton extends StatelessWidget {
   // final VoidCallback onAppointmentsSelected;
@@ -32,44 +33,46 @@ class AddMeetingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => NewMeetingPage()));
         //TODO: si rompe qui quando apro:
-        showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (BuildContext context) {
-            // return the widget you want to show in the dialog
-            return AlertDialog(
-              title: const Text('Dialog Title'),
-              content: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: "Description",
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Add'),
-                  onPressed: () {
-                    print(descriptionController.text);
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  child: const Text('Close'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
+        // showDialog(
+        //   barrierDismissible: false,
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     // return the widget you want to show in the dialog
+        //     return AlertDialog(
+        //       title: const Text('Dialog Title'),
+        //       content: Row(
+        //         children: [
+        //           Expanded(
+        //             child: TextField(
+        //               controller: descriptionController,
+        //               decoration: const InputDecoration(
+        //                 labelText: "Description",
+        //               ),
+        //             ),
+        //           )
+        //         ],
+        //       ),
+        //       actions: <Widget>[
+        //         TextButton(
+        //           child: const Text('Add'),
+        //           onPressed: () {
+        //             print(descriptionController.text);
+        //             Navigator.of(context).pop();
+        //           },
+        //         ),
+        //         TextButton(
+        //           child: const Text('Close'),
+        //           onPressed: () {
+        //             Navigator.of(context).pop();
+        //           },
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
       },
       backgroundColor: Colors.white,
       shape: const CircleBorder(),
