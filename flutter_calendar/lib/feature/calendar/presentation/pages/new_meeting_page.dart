@@ -3,6 +3,29 @@ import 'package:flutter_calendar/feature/state/meeting_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_calendar/feature/calendar/presentation/pages/calendar_page.dart';
 
+//TODO: capire se usare lui, o il riverpod per addare.
+void addMeeting(
+    /* prende come input il DateTime creato dall'utente in add_meeting_button*/) {
+  // Ottieni la data selezionata dallo stato del provider
+  // final DateTime selectedDate =
+  //     ref.read(meetingProvider.notifier).selectedDate;
+  // final DateTime startTime =
+  //     DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9);
+  // final DateTime endTime = startTime.add(const Duration(hours: 2));
+
+  // Meeting newMeeting = Meeting(
+  //   'Nuovo Meeting ${meetingsOnSelectedDate.length ?? 0 + 1}',
+  //   startTime,
+  //   endTime,
+  //   Colors.purpleAccent,
+  //   false,
+  // );
+  // print("click =>");
+  // print(newMeeting.toString());
+  // ref.read(meetingProvider.notifier).addMeeting(newMeeting);
+  print("ciaoo");
+}
+
 class NewMeetingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
