@@ -30,7 +30,6 @@ class NewMeetingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Ottieni lo stato corrente del meeting e il notifier
-    final meetingState = ref.watch(meetingProvider);
     final meetingNotifier = ref.read(meetingProvider.notifier);
 
     // Crea un TextEditingController con il nome dell'evento corrente
