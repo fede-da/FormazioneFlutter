@@ -75,7 +75,9 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
 
   // Metodo per aggiornare lo stato con una nuova lista di meeting
   void updateMeetings(List<Meeting> meetings) {
-    state = state.copyWithMultipleMeeting(meetings);
+    //TODO: lui rompe tutto:
+    // state = state.copyWithMultipleMeeting(meetings);
+    state.copyWithMultipleMeeting(meetings);
   }
 
   // Metodo per cambiare il meeting corrente

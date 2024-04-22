@@ -45,6 +45,7 @@ class NewMeetingPage extends ConsumerWidget {
           title: const Text('Nuovo Meeting'),
           leading: IconButton(
             // Naviga alla pagina principale quando l'icona viene premuta
+            //TODO: mettere un dialog con "sei sicuro si voler usciro?"
             onPressed: () => Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => MyHomePage())),
             icon: const Icon(Icons.arrow_back),
@@ -58,6 +59,9 @@ class NewMeetingPage extends ConsumerWidget {
                 print(meetingNotifier.startTime);
                 print(meetingNotifier.endTime);
                 meetingNotifier.createMeeting();
+                //TODO: aggiungere la logica in caso di mancato nome o campo
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => MyHomePage()));
               },
               icon: const Icon(Icons.check),
             )
