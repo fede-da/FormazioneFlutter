@@ -20,8 +20,6 @@ class SfCalendarComponent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Lista degli incontri selezionati.
-    final List<Meeting> selectedMeetings =
-        ref.watch(meetingsOnSelectedDateProvider);
     // Ottiene lo stato dei meeting dal provider.
     // final CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
 
@@ -29,7 +27,7 @@ class SfCalendarComponent extends ConsumerWidget {
       // Imposta la vista del calendario su "mese".
       view: CalendarView.month,
       // Imposta la fonte dati per il calendario utilizzando il DataSource degli incontri.
-      dataSource: MeetingDataSource(_getDataSource()),
+      dataSource: MeetingDataSource(ref.watch(meetingProvider).meetings ?? []),
       // Impostazioni per la visualizzazione del mese nel calendario.
       monthViewSettings: const MonthViewSettings(
         appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
@@ -66,54 +64,4 @@ class SfCalendarComponent extends ConsumerWidget {
       },
     );
   }
-
-  // Ottiene la lista dei dati degli incontri.
-  List<Meeting> _getDataSource() {
-    // Ottieni la lista dei meeting dallo stato del provider
-    final List<Meeting>? meetings = ref.watch(meetingProvider).meetings;
-
-    // Se la lista dei meeting è null, restituisci una lista vuota
-    if (meetings == null) {
-      return <Meeting>[];
-    }
-
-    return meetings;
-  }
-
-//   List<Meeting> _getDataSource() {
-//     final List<Meeting> meetings = <Meeting>[];
-//     final DateTime today = DateTime.now();
-//     final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
-//     final DateTime endTime = startTime.add(const Duration(hours: 2));
-//
-//     meetings.add(
-//       Meeting(
-//         'Conference 1',
-//         startTime,
-//         endTime,
-//         const Color(0xFF0F8644),
-//         false,
-//       ),
-//     );
-//     meetings.add(
-//       Meeting(
-//         'Conference 2',
-//         startTime.add(const Duration(days: 1)),
-//         endTime.add(const Duration(days: 1)),
-//         const Color.fromARGB(255, 246, 10, 222),
-//         false,
-//       ),
-//     );
-//     meetings.add(
-//       Meeting(
-//         'Conference 3',
-//         startTime.add(const Duration(days: 10)),
-//         endTime.add(const Duration(days: 10)),
-//         const Color.fromARGB(255, 250, 246, 25),
-//         false,
-//       ),
-//     );
-//     return meetings;
-//   }
-// }
 }

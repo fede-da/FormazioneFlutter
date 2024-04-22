@@ -25,8 +25,8 @@ class MyHomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final List<Meeting>? meetingsOnSelectedDate =
     //     ref.watch(meetingProvider).meetings;
-    final List<Meeting> meetingsOnSelectedDate =
-        ref.watch(meetingsOnSelectedDateProvider);
+    MeetingNotifier meetingsNotifier = ref.read(meetingProvider.notifier);
+
     //TODO: controllare qui:
     void addMeeting(
         /* prende come input il DateTime creato dall'utente in add_meeting_button*/) {
@@ -71,29 +71,29 @@ class MyHomePage extends ConsumerWidget {
                 Expanded(
                   flex: aboveSize,
                   child: SfCalendarComponent(
-                    // Passa ref come parametro al widget SfCalendarComponent
-                    ref: ref,
-                    // Passa una funzione di callback per ricevere la lista degli appuntamenti del giorno selezionato
-                    onAppointmentsSelected: (meetings) {
-                      // Controlla se i meeting sono cambiati
-                      if (meetings != meetingsOnSelectedDate) {
-                        // Utilizza Riverpod per aggiornare lo stato
-                        ref
-                            .read(meetingProvider.notifier)
-                            .updateMeetings(meetings);
-                        //TODO: grazie a lui si aggirona, ma è sbagliato perché ricostruisce tutto il provider
-                        ref.invalidate(meetingsOnSelectedDateProvider);
-                      }
-                    },
-                  ),
+                      // Passa ref come parametro al widget SfCalendarComponent
+                      ref: ref,
+
+                      // Passa una funzione di callback per ricevere la lista degli appuntamenti del giorno selezionato
+                      onAppointmentsSelected: (meetings) {
+                        // Controlla se i meeting sono cambiati
+                        // if (meetings != meetingsOnSelectedDate) {
+                        //   // Utilizza Riverpod per aggiornare lo stato
+                        //   ref
+                        //       .read(meetingProvider.notifier)
+                        //       .updateMeetings(meetings);
+                        //   //TODO: grazie a lui si aggirona, ma è sbagliato perché ricostruisce tutto il provider
+                        //   ref.invalidate(meetingsOnSelectedDateProvider);
+                        meetingsNotifier.updateMeetings(meetings);
+                      }),
                 ),
                 //TODO: controllare qui:
                 Expanded(
                   flex: belowSize,
-                  child: meetingsOnSelectedDate.isNotEmpty
+                  child: meetingsNotifier.state.meetings!.isEmpty
                       ? ListView(
-                          children:
-                              MeetingContainer.asList(meetingsOnSelectedDate),
+                          children: MeetingContainer.asList(
+                              meetingsNotifier.state!.meetings!),
                         )
                       : const Padding(
                           padding: EdgeInsets.all(10),
