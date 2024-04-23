@@ -16,11 +16,9 @@ class MyHomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final List<Meeting>? meetingsOnSelectedDate =
-    //     ref.watch(meetingProvider).meetings;
+    // Ottieni gli incontri corrispondenti alla data selezionata
     final List<Meeting> meetingsOnSelectedDate =
-        ref.watch(meetingsOnSelectedDateProvider);
-    //TODO: controllare qui:
+        ref.read(meetingProvider.notifier).getMeetingsOnSelectedDate();
 
     int aboveSize = 3;
     int belowSize = 1;
@@ -55,7 +53,7 @@ class MyHomePage extends ConsumerWidget {
                             .read(meetingProvider.notifier)
                             .updateMeetings(meetings);
                         //TODO: grazie a lui si aggirona, ma è sbagliato perché ricostruisce tutto il provider
-                        ref.invalidate(meetingsOnSelectedDateProvider);
+                        // ref.invalidate(meetingsOnSelectedDate);
                       }
                     },
                   ),

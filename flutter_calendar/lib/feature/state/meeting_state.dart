@@ -33,40 +33,12 @@ final meetingProvider =
   return MeetingNotifier();
 });
 
-// Nuovo provider per i meeting del giorno corrente
-final meetingsOnSelectedDateProvider = Provider<List<Meeting>>((ref) {
-  final selectedDate = ref.watch(meetingProvider.notifier).selectedDate;
-  final allMeetings = ref.watch(meetingProvider).meetings;
-  return allMeetings?.where((meeting) {
-        return meeting.from.day == selectedDate.day &&
-            meeting.from.month == selectedDate.month &&
-            meeting.from.year == selectedDate.year;
-      }).toList() ??
-      [];
-});
-
-// Provider per aggiungere un nuovo meeting:
-//TODO: capire se toglierlo, crediamo di si.
-// final addNeweetingProvider = StateProvider<Meeting>((ref) {
-//   final selectedDate = ref.watch(meetingProvider.notifier).selectedDate;
-//   return Meeting(
-//       '',
-//       selectedDate,
-//       selectedDate.add(
-//         const Duration(hours: 1),
-//       ),
-//       Colors.purpleAccent,
-//       false);
-// });
-
-// nuovo provider che controlla gli aggiornamenti della lista:
-
 // Implementazione della classe MeetingNotifier
 class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   DateTime selectedDate = DateTime.now();
   String eventName = '';
-  TimeOfDay startTime = TimeOfDay(hour: 9, minute: 0);
-  TimeOfDay endTime = TimeOfDay(hour: 18, minute: 0);
+  TimeOfDay startTime = const TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay endTime = const TimeOfDay(hour: 18, minute: 0);
 
   MeetingNotifier()
       : super(const CalendarMeetings(meetings: [], currentMeeting: null)) {
@@ -83,6 +55,16 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   // Metodo per cambiare il meeting corrente
   void changeCurrentMeeting(Meeting newMeeting) {
     state = state.copyWithSingleMeeting(newMeeting);
+  }
+
+  // Metodo per ottenere i meeting di una data specifica
+  List<Meeting> getMeetingsOnSelectedDate() {
+    return state.meetings?.where((meeting) {
+          return meeting.from.day == selectedDate.day &&
+              meeting.from.month == selectedDate.month &&
+              meeting.from.year == selectedDate.year;
+        }).toList() ??
+        [];
   }
 
   // Metodo per creare un meeting:

@@ -19,11 +19,8 @@ class SfCalendarComponent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Lista degli incontri selezionati.
-    final List<Meeting> selectedMeetings =
-        ref.watch(meetingsOnSelectedDateProvider);
     // Ottiene lo stato dei meeting dal provider.
-    // final CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
+    final CalendarMeetings calendarMeetings = ref.watch(meetingProvider);
 
     return SfCalendar(
       // Imposta la vista del calendario su "mese".
@@ -35,34 +32,27 @@ class SfCalendarComponent extends ConsumerWidget {
         appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
       ),
       // Gestisce l'evento onTap nel calendario.
-      //TODO: controllare qui:
       onTap: (CalendarTapDetails details) {
         // Se ci sono incontri selezionati.
-        // if (details.appointments != null) {
-        // print("ontap => ");
-        // print(selectedMeetings.toString());
-        // Pulisce la lista degli incontri selezionati.
-        // selectedMeetings.clear();
-        // Aggiunge gli incontri selezionati alla lista.
-        // selectedMeetings.addAll(details.appointments!.cast<Meeting>());
-        // Passa gli incontri selezionati alla home
-        // onAppointmentsSelected(selectedMeetings);
-
-        // Aggiorna la data selezionata nel provider
-        // ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
-        // }
+        if (details.appointments != null) {
+          // Pulisce la lista degli incontri selezionati.
+          List<Meeting> selectedMeetings = [];
+          // Aggiunge gli incontri selezionati alla lista.
+          selectedMeetings.addAll(details.appointments!.cast<Meeting>());
+          // Passa gli incontri selezionati alla home
+          onAppointmentsSelected(selectedMeetings);
+        }
       },
-
       onSelectionChanged: (CalendarSelectionDetails details) {
-        // if (details.date != null) {
-        // Aggiorna la data selezionata nel provider
-        ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
-        // Ottieni gli incontri corrispondenti alla data selezionata
-        List<Meeting> selectedMeetings =
-            ref.read(meetingProvider.notifier).getMeetingsOnDate(details.date!);
-        // Passa gli incontri selezionati alla home
-        onAppointmentsSelected(selectedMeetings);
-        // }
+        if (details.date != null) {
+          // Aggiorna la data selezionata nel provider
+          ref.read(meetingProvider.notifier).updateSelectedDate(details.date!);
+          // Ottieni gli incontri corrispondenti alla data selezionata
+          List<Meeting> selectedMeetings =
+              ref.read(meetingProvider.notifier).getMeetingsOnSelectedDate();
+          // Passa gli incontri selezionati alla home
+          onAppointmentsSelected(selectedMeetings);
+        }
       },
     );
   }
@@ -79,41 +69,4 @@ class SfCalendarComponent extends ConsumerWidget {
 
     return meetings;
   }
-
-//   List<Meeting> _getDataSource() {
-//     final List<Meeting> meetings = <Meeting>[];
-//     final DateTime today = DateTime.now();
-//     final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
-//     final DateTime endTime = startTime.add(const Duration(hours: 2));
-//
-//     meetings.add(
-//       Meeting(
-//         'Conference 1',
-//         startTime,
-//         endTime,
-//         const Color(0xFF0F8644),
-//         false,
-//       ),
-//     );
-//     meetings.add(
-//       Meeting(
-//         'Conference 2',
-//         startTime.add(const Duration(days: 1)),
-//         endTime.add(const Duration(days: 1)),
-//         const Color.fromARGB(255, 246, 10, 222),
-//         false,
-//       ),
-//     );
-//     meetings.add(
-//       Meeting(
-//         'Conference 3',
-//         startTime.add(const Duration(days: 10)),
-//         endTime.add(const Duration(days: 10)),
-//         const Color.fromARGB(255, 250, 246, 25),
-//         false,
-//       ),
-//     );
-//     return meetings;
-//   }
-// }
 }
