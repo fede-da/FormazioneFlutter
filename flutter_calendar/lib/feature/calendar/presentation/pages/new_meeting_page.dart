@@ -13,6 +13,7 @@ class NewMeetingPage extends ConsumerWidget {
     // Crea un TextEditingController con il nome dell'evento corrente
     TextEditingController textcontroller =
         TextEditingController(text: meetingNotifier.eventName);
+
     textcontroller.selection = TextSelection.fromPosition(
         TextPosition(offset: meetingNotifier.eventName.length));
 

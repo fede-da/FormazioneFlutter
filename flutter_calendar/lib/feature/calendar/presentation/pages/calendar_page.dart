@@ -49,7 +49,6 @@ class MyHomePage extends ConsumerWidget {
                     },
                   ),
                 ),
-                //TODO: controllare qui:
                 Expanded(
                   flex: belowSize,
                   child: meetingsOnSelectedDate.isNotEmpty
