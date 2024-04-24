@@ -67,11 +67,11 @@ class NewMeetingPage extends ConsumerWidget {
               },
             ),
             TimeSelectionTile(
-              title: 'Dalle',
+              isStartTime: true,
               meetingNotifier: meetingNotifier,
             ),
             TimeSelectionTile(
-              title: 'Alle',
+              isStartTime: false,
               meetingNotifier: meetingNotifier,
             ),
           ],

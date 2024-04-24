@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar/feature/state/meeting_state.dart';
 
 class TimeSelectionTile extends StatefulWidget {
-  final String title;
+  final bool isStartTime;
   final MeetingNotifier meetingNotifier;
 
   const TimeSelectionTile({
-    required this.title,
+    required this.isStartTime,
     required this.meetingNotifier,
   });
 
@@ -20,7 +20,7 @@ class _TimeSelectionTileState extends State<TimeSelectionTile> {
   @override
   void initState() {
     super.initState();
-    if (widget.title == 'Dalle') {
+    if (widget.isStartTime) {
       initialTime = const TimeOfDay(hour: 9, minute: 0);
     } else {
       initialTime = const TimeOfDay(hour: 18, minute: 0);
@@ -30,7 +30,8 @@ class _TimeSelectionTileState extends State<TimeSelectionTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text('${widget.title}: ${initialTime.format(context)}'),
+      title: Text(
+          '${widget.isStartTime ? 'Dalle' : 'Alle'}: ${initialTime.format(context)}'),
       trailing: const Icon(Icons.access_time),
       onTap: () async {
         final TimeOfDay? picked = await showTimePicker(
@@ -40,7 +41,7 @@ class _TimeSelectionTileState extends State<TimeSelectionTile> {
         if (picked != null) {
           setState(() {
             initialTime = picked;
-            if (widget.title == 'Dalle') {
+            if (widget.isStartTime) {
               widget.meetingNotifier.startTime = picked;
             } else {
               widget.meetingNotifier.endTime = picked;
