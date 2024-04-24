@@ -28,9 +28,23 @@ class NewMeetingPage extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () {
-              meetingNotifier.createMeeting();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()));
+              if (meetingNotifier.startTime.hour >
+                      meetingNotifier.endTime.hour ||
+                  (meetingNotifier.startTime.hour ==
+                          meetingNotifier.endTime.hour &&
+                      meetingNotifier.startTime.minute >
+                          meetingNotifier.endTime.minute)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                        'L\'orario di inizio non può essere successivo all\'orario di fine!'),
+                  ),
+                );
+              } else {
+                meetingNotifier.createMeeting();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => MyHomePage()));
+              }
             },
             icon: const Icon(Icons.check),
           ),

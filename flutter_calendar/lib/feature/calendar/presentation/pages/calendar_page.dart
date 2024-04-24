@@ -6,11 +6,6 @@ import 'package:flutter_calendar/feature/calendar/presentation/widgets/sfcalenda
 import 'package:flutter_calendar/feature/state/meeting_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// `ConsumerWidget` è un widget che permette di ascoltare i cambiamenti di un provider
-/// ricostruendo l'interfaccia utente in risposta a questi cambiamenti.
-/// Estende `StatelessWidget` e aggiunge un parametro extra al metodo `build`: l'oggetto "ref".
-/// Questo oggetto "ref" permette di interagire con i provider all'interno dell'albero dei widget.
-
 class MyHomePage extends ConsumerWidget {
   const MyHomePage({super.key});
 
@@ -33,8 +28,6 @@ class MyHomePage extends ConsumerWidget {
           backgroundColor: Colors.red,
           title: const Text('Calendario'),
         ),
-        // stack = sovrappone i propri figli, posizionandoli l'uno sull'altro.
-        // I figli sono posizionati in base all'allineamento e alle loro proprietà top, right, bottom e left.
         body: Stack(
           children: [
             Column(
@@ -47,14 +40,12 @@ class MyHomePage extends ConsumerWidget {
                     // Passa una funzione di callback per ricevere la lista degli appuntamenti del giorno selezionato
                     onAppointmentsSelected: (meetings) {
                       // Controlla se i meeting sono cambiati
-                      if (meetings != meetingsOnSelectedDate) {
-                        // Utilizza Riverpod per aggiornare lo stato
-                        ref
-                            .read(meetingProvider.notifier)
-                            .updateMeetings(meetings);
-                        //TODO: grazie a lui si aggirona, ma è sbagliato perché ricostruisce tutto il provider
-                        // ref.invalidate(meetingsOnSelectedDate);
-                      }
+                      // if (meetings != meetingsOnSelectedDate) {
+                      // Utilizza Riverpod per aggiornare lo stato
+                      ref
+                          .read(meetingProvider.notifier)
+                          .updateMeetings(meetings);
+                      // }
                     },
                   ),
                 ),
