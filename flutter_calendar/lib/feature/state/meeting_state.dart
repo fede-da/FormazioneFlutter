@@ -71,6 +71,7 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
         [];
   }
 
+
   // Metodo per creare un meeting:
   void createMeeting() {
     Meeting newMeeting = Meeting(
