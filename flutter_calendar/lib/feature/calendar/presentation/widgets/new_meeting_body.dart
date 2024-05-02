@@ -6,11 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class NewMeetingBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final meetingNotifier = ref.read(meetingProvider.notifier);
+
+    final  tmpProvider = StateNotifierProvider<MeetingNotifier, CalendarMeetings>((ref) {
+      return MeetingNotifier();
+    });
+    final MeetingNotifier meetingNotifierNewMeetingPage = ref.read(tmpProvider.notifier);
+
+    meetingNotifierNewMeetingPage.selectedDate = ref.read(meetingProvider.notifier).selectedDate;
+
     TextEditingController textcontroller =
-    TextEditingController(text: meetingNotifier.eventName);
+    TextEditingController(text: meetingNotifierNewMeetingPage.eventName);
     textcontroller.selection = TextSelection.fromPosition(
-        TextPosition(offset: meetingNotifier.eventName.length));
+        TextPosition(offset: meetingNotifierNewMeetingPage.eventName.length));
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -20,35 +27,40 @@ class NewMeetingBody extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextField(
               controller: textcontroller,
-              onChanged: (value) => meetingNotifier.eventName = value,
+              onChanged: (value) => meetingNotifierNewMeetingPage.eventName = value,
               decoration: const InputDecoration(
                 labelText: 'Nome evento',
               ),
             ),
           ),
+          // DATE PICKER
           ListTile(
             title: Text(
-                'Data: ${meetingNotifier.selectedDate.toLocal().toString().split(' ')[0]}'),
+                'Data: ${meetingNotifierNewMeetingPage.selectedDate.toLocal().toString().split(' ')[0]}'),
             trailing: const Icon(Icons.calendar_today),
             onTap: () async {
               final DateTime? picked = await showDatePicker(
                 context: context,
-                initialDate: meetingNotifier.selectedDate,
+                initialDate: meetingNotifierNewMeetingPage.selectedDate,
                 firstDate: DateTime(2000, 1),
                 lastDate: DateTime(3000),
               );
               if (picked != null) {
-                meetingNotifier.updateSelectedDate(picked);
+                meetingNotifierNewMeetingPage.updateSelectedDate(picked);
               }
             },
           ),
+
+          // INITIAL TIME PICKER
           TimeSelectionTile(
             isStartTime: true,
-            meetingNotifier: meetingNotifier,
+            meetingNotifier: meetingNotifierNewMeetingPage,
           ),
+
+          // END TIME PICKER
           TimeSelectionTile(
             isStartTime: false,
-            meetingNotifier: meetingNotifier,
+            meetingNotifier: meetingNotifierNewMeetingPage,
           ),
         ],
       ),
