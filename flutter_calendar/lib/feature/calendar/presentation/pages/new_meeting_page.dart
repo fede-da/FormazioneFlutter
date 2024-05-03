@@ -8,32 +8,44 @@ import '../widgets/text_event_component.dart';
 import '../widgets/time_selection_component.dart';
 import 'calendar_page.dart'; // Assumi che questo import sia corretto
 
-
-
 class NewMeetingPage extends ConsumerWidget {
   const NewMeetingPage({super.key});
 
   @override
-  Widget build(BuildContext context,  WidgetRef ref) {
-
-    final  tmpProvider = StateNotifierProvider<MeetingNotifier, CalendarMeetings>((ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tmpProvider =
+        StateNotifierProvider<MeetingNotifier, CalendarMeetings>((ref) {
       return MeetingNotifier();
     });
-    final MeetingNotifier meetingNotifierNewMeetingPage = ref.read(tmpProvider.notifier);
+    final MeetingNotifier meetingNotifierNewMeetingPage =
+        ref.read(tmpProvider.notifier);
 
-    meetingNotifierNewMeetingPage.selectedDate = ref.read(meetingProvider.notifier).selectedDate;
+    meetingNotifierNewMeetingPage.selectedDate =
+        ref.read(meetingProvider.notifier).selectedDate;
 
     TextEditingController textcontroller =
-    TextEditingController(text: meetingNotifierNewMeetingPage.eventName);
+        TextEditingController(text: meetingNotifierNewMeetingPage.eventName);
 
-   Meeting getMeeting() {
-    return Meeting(
-        meetingNotifierNewMeetingPage.eventName,
-        DateTime(meetingNotifierNewMeetingPage.selectedDate.year, meetingNotifierNewMeetingPage.selectedDate.month, meetingNotifierNewMeetingPage.selectedDate.day, meetingNotifierNewMeetingPage.startTime.hour, meetingNotifierNewMeetingPage.startTime.minute),
-        DateTime(meetingNotifierNewMeetingPage.selectedDate.year, meetingNotifierNewMeetingPage.selectedDate.month, meetingNotifierNewMeetingPage.selectedDate.day, meetingNotifierNewMeetingPage.endTime.hour, meetingNotifierNewMeetingPage.endTime.minute),
-        Colors.deepPurpleAccent,
-        false);
-  }
+    Meeting getMeeting() {
+      return Meeting(
+          meetingNotifierNewMeetingPage.eventName,
+          DateTime(
+            meetingNotifierNewMeetingPage.selectedDate.year,
+            meetingNotifierNewMeetingPage.selectedDate.month,
+            meetingNotifierNewMeetingPage.selectedDate.day,
+            meetingNotifierNewMeetingPage.startTime.hour,
+            meetingNotifierNewMeetingPage.startTime.minute,
+          ),
+          DateTime(
+            meetingNotifierNewMeetingPage.selectedDate.year,
+            meetingNotifierNewMeetingPage.selectedDate.month,
+            meetingNotifierNewMeetingPage.selectedDate.day,
+            meetingNotifierNewMeetingPage.endTime.hour,
+            meetingNotifierNewMeetingPage.endTime.minute,
+          ),
+          Colors.deepPurpleAccent,
+          false);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -44,25 +56,22 @@ class NewMeetingPage extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back),
         ),
         actions: [
-          CheckIconButton( onPressed: () => getMeeting() ),
+          CheckIconButton(onPressed: () => getMeeting()),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-
             // TEXT FIELD
             TextEventComponent(
               meetingNotifier: meetingNotifierNewMeetingPage,
               currentController: textcontroller,
-
             ),
 
             // DATE PICKER
             DateSelectionComponent(
-                meetingNotifier: meetingNotifierNewMeetingPage
-            ),
+                meetingNotifier: meetingNotifierNewMeetingPage),
 
             // INITIAL TIME PICKER
             TimeSelectionTile(
@@ -81,5 +90,3 @@ class NewMeetingPage extends ConsumerWidget {
     );
   }
 }
-
-
