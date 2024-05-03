@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar/feature/calendar/presentation/pages/new_meeting_page.dart';
 
 class AddMeetingButton extends StatelessWidget {
-  final VoidCallback onAppointmentsSelected;
+  // final VoidCallback onAppointmentsSelected;
+  final TextEditingController descriptionController = TextEditingController();
 
-  const AddMeetingButton({super.key, required this.onAppointmentsSelected});
+  AddMeetingButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: onAppointmentsSelected,
+      onPressed: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => NewMeetingPage()));
+      },
       backgroundColor: Colors.white,
       shape: const CircleBorder(),
       child: const Icon(
@@ -17,17 +22,6 @@ class AddMeetingButton extends StatelessWidget {
         size: 30,
       ),
     );
-  }
-
-  void showPopupSelectDayAndTime() {
-    final DateTime selectedDate = DateTime.now();
-    final DateTime startTime =
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 9);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-
-    DateTime selectedDateTime = DateTime.now();
-
-    // Conferma che aggiunge al provider
   }
 }
 

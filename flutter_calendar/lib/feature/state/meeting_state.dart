@@ -33,23 +33,12 @@ final meetingProvider =
   return MeetingNotifier();
 });
 
-// Nuovo provider per i meeting del giorno corrente
-final meetingsOnSelectedDateProvider = Provider<List<Meeting>>((ref) {
-  final selectedDate = ref.watch(meetingProvider.notifier).selectedDate;
-  final allMeetings = ref.watch(meetingProvider).meetings;
-  return allMeetings?.where((meeting) {
-        return meeting.from.day == selectedDate.day &&
-            meeting.from.month == selectedDate.month &&
-            meeting.from.year == selectedDate.year;
-      }).toList() ??
-      [];
-});
-
-// nuovo provider che controlla gli aggiornamenti della lista:
-
 // Implementazione della classe MeetingNotifier
 class MeetingNotifier extends StateNotifier<CalendarMeetings> {
   DateTime selectedDate = DateTime.now();
+  String eventName = '';
+  TimeOfDay startTime = const TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay endTime = const TimeOfDay(hour: 18, minute: 0);
 
   MeetingNotifier()
       : super(const CalendarMeetings(meetings: [], currentMeeting: null)) {
@@ -58,9 +47,13 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
 
   // Metodo per aggiornare lo stato con una nuova lista di meeting
   void updateMeetings(List<Meeting> meetings) {
-    //TODO: lui rompe tutto:
-    // state = state.copyWithMultipleMeeting(meetings);
-    state.copyWithMultipleMeeting(meetings);
+    // Converte la lista di meeting attuali in un set (set contiene ele unici non dupplicati).
+    Set<Meeting> updatedMeetings = (state.meetings ?? []).toSet();
+    // Aggiunge tutti i meeting dalla lista passata come parametro al set.
+    // Se un meeting è già presente nel set, non verrà aggiunto di nuovo.
+    updatedMeetings.addAll(meetings);
+    // Converte il set di meeting aggiornato in una lista e aggiorna lo stato.
+    state = state.copyWithMultipleMeeting(updatedMeetings.toList());
   }
 
   // Metodo per cambiare il meeting corrente
@@ -68,13 +61,63 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
     state = state.copyWithSingleMeeting(newMeeting);
   }
 
+  // Metodo per ottenere i meeting di una data specifica
+  List<Meeting> getMeetingsOnSelectedDate() {
+    return state.meetings?.where((meeting) {
+          return meeting.from.day == selectedDate.day &&
+              meeting.from.month == selectedDate.month &&
+              meeting.from.year == selectedDate.year;
+        }).toList() ??
+        [];
+  }
+
+
+  // Metodo per creare un meeting:
+  void createMeeting() {
+    Meeting newMeeting = Meeting(
+      eventName,
+      DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        startTime.hour,
+        startTime.minute,
+      ),
+      DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        endTime.hour,
+        endTime.minute,
+      ),
+      Colors.purpleAccent,
+      false,
+    );
+
+    addMeeting(newMeeting);
+  }
+
   // Metodo per aggiungere un meeting
   void addMeeting(Meeting newMeeting) {
-    final List<Meeting> updatedMeetings =
-        List<Meeting>.from(state.meetings ?? []);
-
+    List<Meeting> updatedMeetings = state.meetings ?? [];
     updatedMeetings.add(newMeeting);
     state = state.copyWithMultipleMeeting(updatedMeetings);
+  }
+
+  // Metodo per selezionare il giorno cliccato
+  // per aggiungere poi il meeting
+  void updateSelectedDate(DateTime newDate) {
+    selectedDate = newDate;
+  }
+
+  // Metodo per ottenere i meeting di una data specifica
+  List<Meeting> getMeetingsOnDate(DateTime date) {
+    return state.meetings?.where((meeting) {
+          return meeting.from.day == date.day &&
+              meeting.from.month == date.month &&
+              meeting.from.year == date.year;
+        }).toList() ??
+        [];
   }
 
   // Metodo per aggiungere i dati mock
@@ -104,21 +147,5 @@ class MeetingNotifier extends StateNotifier<CalendarMeetings> {
           false),
     ];
     state = state.copyWithMultipleMeeting(mockMeetings);
-  }
-
-  // Metodo per selezionare il giorno cliccato
-  // per aggiungere poi il meeting
-  void updateSelectedDate(DateTime newDate) {
-    selectedDate = newDate;
-  }
-
-  //WIP
-  List<Meeting> getMeetingsOnDate(DateTime date) {
-    return state.meetings?.where((meeting) {
-          return meeting.from.day == date.day &&
-              meeting.from.month == date.month &&
-              meeting.from.year == date.year;
-        }).toList() ??
-        [];
   }
 }
